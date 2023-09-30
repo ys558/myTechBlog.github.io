@@ -1,5 +1,5 @@
 ---
-title: 【2023-09-30】Rust语言学习
+title: Rust学习笔记（1）—— 安装、cargo、crate
 date: 2023-09-30 08:46:38
 tags:
   - rust

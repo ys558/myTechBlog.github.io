@@ -100,3 +100,11 @@ Github建站好之后，经常会碰到打开页面浏览器显示不是私密�
 
 ![阿里云的DNS修改操作](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.20/articles/GithubPage建站心得及所踩的坑/05.png)   
 ![从 cloudfare 复制DNS ](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.20/articles/GithubPage建站心得及所踩的坑/06.png)
+
+## `Github Page` 更新自己的域名
+
+1. 点击仓库 `ys558.github.io` 里的 `Settings`
+2. 点击左侧的 `Pages`
+3. 在 `Custom domain` 里输入自己配置好DNS的域名
+4. 点击 `Save`, 则会自动检查域名是否可用  
+![从 cloudfare 复制DNS ](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.51/articles/GithubPage建站心得及所踩的坑/github_page_1.png)
