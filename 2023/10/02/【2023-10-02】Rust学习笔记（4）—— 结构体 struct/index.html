@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Rust学习笔记（4）—— 结构体 struct | 自由の翼小栈</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="本文的参考代码在这里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust学习笔记（4）—— 结构体 struct">
+<meta property="og:url" content="https://zyzy.info/2023/10/02/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%20%E7%BB%93%E6%9E%84%E4%BD%93%20struct/index.html">
+<meta property="og:site_name" content="自由の翼小栈">
+<meta property="og:description" content="本文的参考代码在这里">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-02T02:46:38.000Z">
+<meta property="article:modified_time" content="2023-10-02T08:11:55.936Z">
+<meta property="article:author" content="自由の翼">
+<meta property="article:tag" content="rust">
+<meta property="article:tag" content="struct">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="自由の翼小栈" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">自由の翼小栈</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">技术&amp;生活分享</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://zyzy.info"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-【2023-10-02】Rust学习笔记（4）—— 结构体 struct" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/02/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%20%E7%BB%93%E6%9E%84%E4%BD%93%20struct/" class="article-date">
+  <time class="dt-published" datetime="2023-10-02T02:46:38.000Z" itemprop="datePublished">2023-10-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Rust学习笔记（4）—— 结构体 struct
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>本文的参考代码在<a target="_blank" rel="noopener" href="https://github.com/ys558/rust-learn/tree/main/a5_struct">这里</a></p>
+<span id="more"></span>
+
+<h2 id="定义及实例化结构-Struct"><a href="#定义及实例化结构-Struct" class="headerlink" title="定义及实例化结构 Struct"></a>定义及实例化结构 Struct</h2><p><code>struct</code> 关键字，中文可以理解为结构体, 是一种自定义数据类型。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">User</span></span> &#123;</span><br><span class="line">  username: <span class="built_in">String</span>,</span><br><span class="line">  active: <span class="built_in">bool</span>,</span><br><span class="line">  email: <span class="built_in">String</span>,</span><br><span class="line">  sign_in_count: <span class="built_in">u64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">mut</span> user1 = User &#123;</span><br><span class="line">    username: <span class="built_in">String</span>::from(<span class="string">&quot;user1&quot;</span>),</span><br><span class="line">    email: <span class="built_in">String</span>::from(<span class="string">&quot;user1@mail.com&quot;</span>),</span><br><span class="line">    active: <span class="literal">true</span>,</span><br><span class="line">    sign_in_count: <span class="number">1</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>改变实例中的值，可以直接用点 <code>.</code> 进行访问及赋值，如：</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> name = user1.username;</span><br><span class="line">user1.username = <span class="built_in">String</span>::from(<span class="string">&quot;John123&quot;</span>);</span><br><span class="line"><span class="built_in">println!</span>(</span><br><span class="line">  <span class="string">&quot;username before: &#123;&#125;, username after: &#123;&#125;&quot;</span>, </span><br><span class="line">  name, user1.username</span><br><span class="line">); <span class="comment">// username before: user1, username after: John123</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Field-Init-简写"><a href="#Field-Init-简写" class="headerlink" title="Field Init 简写"></a><code>Field Init</code> 简写</h3><p>用函数生成实例：封装一个函数用于生成 User 对象，再生成一个 <code>user2</code>的实例</p>
+<p>当生成 <code>user3</code> 时，如果其他属性不想列出，可以直接用 <code>..</code> 的语法拿取 <code>user2</code> 中的参数直接使用：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> user2 = build_user(</span><br><span class="line">    <span class="built_in">String</span>::from(<span class="string">&quot;kyle@mail.com&quot;</span>), </span><br><span class="line">    <span class="built_in">String</span>::from(<span class="string">&quot;kyle123&quot;</span>)</span><br><span class="line">  );</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;user2.username =&gt; &#123;&#125;, user3.email after =&gt; &#123;&#125;&quot;</span>, user2.username, user2.email); <span class="comment">// user2.username =&gt; kyle123, user3.email after =&gt; kyle@mail.com</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> user3 = User &#123;</span><br><span class="line">    email: <span class="built_in">String</span>::from(<span class="string">&quot;james@mail.com&quot;</span>),</span><br><span class="line">    username: <span class="built_in">String</span>::from(<span class="string">&quot;james234&quot;</span>),</span><br><span class="line">    ..user2</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;user3.username &#123;&#125;, user3.email &#123;&#125;&quot;</span>, user3.username, user3.email); <span class="comment">// user3.username james234, user3.email james@mail.com</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">build_user</span></span>(email: <span class="built_in">String</span>, username: <span class="built_in">String</span>) -&gt; User &#123;</span><br><span class="line">  User &#123;</span><br><span class="line">    email,</span><br><span class="line">    username,</span><br><span class="line">    active: <span class="literal">true</span>,</span><br><span class="line">    sign_in_count: <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="tuple-struct-使用元组结构创建不同类型"><a href="#tuple-struct-使用元组结构创建不同类型" class="headerlink" title="tuple struct 使用元组结构创建不同类型"></a><code>tuple struct</code> 使用元组结构创建不同类型</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tuple struct</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Color</span></span>(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>);</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span></span>(<span class="built_in">i32</span>, <span class="built_in">i32</span>, <span class="built_in">i32</span>);</span><br></pre></td></tr></table></figure>
+
+<p>以下的代码是一个普通的计算长方形面积的函数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> width1 = <span class="number">30</span>;</span><br><span class="line">  <span class="keyword">let</span> height1 = <span class="number">50</span>;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;area of the reactangle is &#123;&#125;&quot;</span>, area(width1, height1)); <span class="comment">// area of the reactangle is 1500</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">area</span></span>(width: <span class="built_in">u32</span>, height: <span class="built_in">u32</span>) -&gt; <span class="built_in">u32</span> &#123;</span><br><span class="line">  width * height</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将其传参改为元组，则可以改写成：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> rect = (<span class="number">30</span>, <span class="number">50</span>);</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;area of the reactangle is &#123;&#125;&quot;</span>, area_by_tuple(rect)); <span class="comment">// area of the reactangle is 1500</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">area_by_tuple</span></span>(dimensions: (<span class="built_in">u32</span>, <span class="built_in">u32</span>)) -&gt; <span class="built_in">u32</span> &#123;</span><br><span class="line">  dimensions.<span class="number">0</span> * dimensions.<span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将元组的部分提炼成 <code>struct</code>, 改写成：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Rectangle</span></span> &#123;</span><br><span class="line">  width: <span class="built_in">u32</span>,</span><br><span class="line">  height: <span class="built_in">u32</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> rect1 = Rectangle &#123;</span><br><span class="line">    width: <span class="number">30</span>,</span><br><span class="line">    height: <span class="number">50</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;rect1 &#123;:?&#125;&quot;</span>, rect1); <span class="comment">// rect1 Rectangle &#123; width: 30, height: 50 &#125;</span></span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;the area of the reactangle is  &#123;&#125;&quot;</span>, area_by_struct(&amp;rect1)); <span class="comment">// the area of the reactangle is  1500</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">area_by_struct</span></span>(rectangle: &amp;Rectangle) -&gt; <span class="built_in">u32</span> &#123;</span><br><span class="line">  rectangle.width * rectangle.height</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>tips：在我们定义了 <code>let rect1</code> 后我们是无法直接打印出来的，会报错，这时，我们需要在 <code>struct Rectangle</code> 上加一个修饰符 <code>#[derive(Debug)]</code>，而且打印里的{}也需要加上，才能正确打印出 <code>rect1</code>，如：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug)]</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Rectangle</span></span> &#123;</span><br><span class="line">  width: <span class="built_in">u32</span>,</span><br><span class="line">  height: <span class="built_in">u32</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> rect1 = Rectangle &#123;</span><br><span class="line">    width: <span class="number">30</span>,</span><br><span class="line">    height: <span class="number">50</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;rect1 &#123;:?&#125;&quot;</span>, rect1); <span class="comment">// rect1 Rectangle &#123; width: 30, height: 50 &#125;</span></span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;rect1 &#123;:#?&#125;&quot;</span>, rect1); </span><br><span class="line">  <span class="comment">// rect1 Rectangle &#123;</span></span><br><span class="line">  <span class="comment">//   width: 30,</span></span><br><span class="line">  <span class="comment">//   height: 50,</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上涉及到 <code>trait</code> 特征的概念，我们后面的章节会讲到</p>
+<h3 id="方法-Method-Syntax"><a href="#方法-Method-Syntax" class="headerlink" title="方法 Method Syntax"></a>方法 Method Syntax</h3><h4 id="定义方法"><a href="#定义方法" class="headerlink" title="定义方法"></a>定义方法</h4><p>上面的 <code>struct</code> 由于有固定的公式，即width*height </p>
+<ul>
+<li>我们可以把他简化为 <code>impl</code>, 将area的计算公式定义在其内部，少写了一个函数</li>
+<li></li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug)]</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Rectangle</span></span> &#123;</span><br><span class="line">  width: <span class="built_in">u32</span>,</span><br><span class="line">  height: <span class="built_in">u32</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Rectangle &#123;</span><br><span class="line">  <span class="function"><span class="keyword">fn</span> <span class="title">area_by_impl</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">u32</span> &#123;</span><br><span class="line">    <span class="keyword">self</span>.width * <span class="keyword">self</span>.height</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">fn</span> <span class="title">can_hold</span></span>(&amp;<span class="keyword">self</span>, other: &amp;Rectangle) -&gt; <span class="built_in">bool</span> &#123;</span><br><span class="line">    <span class="keyword">self</span>.width &gt; other.width &amp;&amp; <span class="keyword">self</span>.height &gt; other.height</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> rect2 = Rectangle &#123;</span><br><span class="line">    width: <span class="number">33</span>,</span><br><span class="line">    height: <span class="number">55</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;the area of the reactangle is  &#123;&#125;&quot;</span>, rect2.area_by_impl()); <span class="comment">// the area of the reactangle is  1815</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> rect3 = Rectangle &#123;</span><br><span class="line">    width: <span class="number">22</span>,</span><br><span class="line">    height: <span class="number">33</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">let</span> rect4 = Rectangle &#123;</span><br><span class="line">    width: <span class="number">66</span>,</span><br><span class="line">    height: <span class="number">77</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;rect2 can hold rect3 &#123;&#125;&quot;</span>, rect2.can_hold(&amp;rect3)); <span class="comment">// rect2 can hold rect3 true</span></span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;rect2 can hold rect4 &#123;&#125;&quot;</span>, rect2.can_hold(&amp;rect4)); <span class="comment">// rect2 can hold rect4 false</span></span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="关联函数"><a href="#关联函数" class="headerlink" title="关联函数"></a>关联函数</h3><p>尽管官方文档有很多解释，但简单来说就是 <code>impl</code> 能直接像普通函数一样传入参数，我们来看一个例子</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">impl</span> Rectangle &#123;</span><br><span class="line">  <span class="function"><span class="keyword">fn</span> <span class="title">square</span></span>(size: <span class="built_in">u32</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="keyword">Self</span> &#123;</span><br><span class="line">      width: size,</span><br><span class="line">      height: size</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> rect5 = Rectangle::square(<span class="number">22</span>);</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;rect5 &#123;:?&#125;&quot;</span>, rect5); <span class="comment">// rect5 Rectangle &#123; width: 22, height: 22 &#125;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>需要注意，关联函数需要用 <code>::</code> 进行函数传值，而不是点。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://zyzy.info/2023/10/02/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%20%E7%BB%93%E6%9E%84%E4%BD%93%20struct/" data-id="cln8m60ob004jd2ulh1lud3sd" data-title="Rust学习笔记（4）—— 结构体 struct" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rust/" rel="tag">rust</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/struct/" rel="tag">struct</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/10/01/%E3%80%902023-10-01%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%20%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E6%89%80%E6%9C%89%E6%9D%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">Rust学习笔记（3）—— 核心概念：所有权</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Babel/" rel="tag">Babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CDN/" rel="tag">CDN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CJS/" rel="tag">CJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dart/" rel="tag">Dart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESM/" rel="tag">ESM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flutter/" rel="tag">Flutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-Page/" rel="tag">Github Page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GraphQL/" rel="tag">GraphQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HOC/" rel="tag">HOC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IntersectionObserver/" rel="tag">IntersectionObserver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nodejs/" rel="tag">Nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Hooks/" rel="tag">React Hooks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Query/" rel="tag">React Query</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger-UI/" rel="tag">Swagger UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Token/" rel="tag">Token</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">Web性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cargo/" rel="tag">cargo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/conventional-commit/" rel="tag">conventional commit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/esbuild/" rel="tag">esbuild</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eventEmitter/" rel="tag">eventEmitter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lerna/" rel="tag">lerna</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono-repo/" rel="tag">mono repo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-cli/" rel="tag">node cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm-package/" rel="tag">npm package</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ownership/" rel="tag">ownership</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qiankun/" rel="tag">qiankun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rust/" rel="tag">rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssr/" rel="tag">ssr</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/struct/" rel="tag">struct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swagger-jsdoc/" rel="tag">swagger-jsdoc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/type-script/" rel="tag">type script</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/umijs/" rel="tag">umijs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" rel="tag">反向代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E7%AB%AF/" rel="tag">跨端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Babel/" style="font-size: 12.5px;">Babel</a> <a href="/tags/CDN/" style="font-size: 10px;">CDN</a> <a href="/tags/CJS/" style="font-size: 10px;">CJS</a> <a href="/tags/Dart/" style="font-size: 12.5px;">Dart</a> <a href="/tags/ES/" style="font-size: 12.5px;">ES</a> <a href="/tags/ES6/" style="font-size: 10px;">ES6</a> <a href="/tags/ESM/" style="font-size: 10px;">ESM</a> <a href="/tags/Electron/" style="font-size: 10px;">Electron</a> <a href="/tags/Flutter/" style="font-size: 10px;">Flutter</a> <a href="/tags/Github-Page/" style="font-size: 10px;">Github Page</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/HOC/" style="font-size: 10px;">HOC</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/IntersectionObserver/" style="font-size: 10px;">IntersectionObserver</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 10px;">Nodejs</a> <a href="/tags/React/" style="font-size: 20px;">React</a> <a href="/tags/React-Hooks/" style="font-size: 10px;">React Hooks</a> <a href="/tags/React-Query/" style="font-size: 10px;">React Query</a> <a href="/tags/Swagger-UI/" style="font-size: 10px;">Swagger UI</a> <a href="/tags/Token/" style="font-size: 10px;">Token</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 15px;">Webpack</a> <a href="/tags/Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">Web性能优化</a> <a href="/tags/cargo/" style="font-size: 12.5px;">cargo</a> <a href="/tags/conventional-commit/" style="font-size: 10px;">conventional commit</a> <a href="/tags/esbuild/" style="font-size: 12.5px;">esbuild</a> <a href="/tags/eventEmitter/" style="font-size: 10px;">eventEmitter</a> <a href="/tags/flutter/" style="font-size: 10px;">flutter</a> <a href="/tags/lerna/" style="font-size: 10px;">lerna</a> <a href="/tags/mono-repo/" style="font-size: 10px;">mono repo</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/node-cli/" style="font-size: 10px;">node cli</a> <a href="/tags/npm-package/" style="font-size: 10px;">npm package</a> <a href="/tags/ownership/" style="font-size: 10px;">ownership</a> <a href="/tags/qiankun/" style="font-size: 10px;">qiankun</a> <a href="/tags/react/" style="font-size: 12.5px;">react</a> <a href="/tags/rust/" style="font-size: 17.5px;">rust</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/struct/" style="font-size: 10px;">struct</a> <a href="/tags/swagger-jsdoc/" style="font-size: 10px;">swagger-jsdoc</a> <a href="/tags/type-script/" style="font-size: 15px;">type script</a> <a href="/tags/umijs/" style="font-size: 10px;">umijs</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/yarn/" style="font-size: 10px;">yarn</a> <a href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" style="font-size: 10px;">反向代理</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 12.5px;">后端</a> <a href="/tags/%E8%B7%A8%E7%AB%AF/" style="font-size: 10px;">跨端</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/02/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%20%E7%BB%93%E6%9E%84%E4%BD%93%20struct/">Rust学习笔记（4）—— 结构体 struct</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/01/%E3%80%902023-10-01%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%20%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E6%89%80%E6%9C%89%E6%9D%83/">Rust学习笔记（3）—— 核心概念：所有权</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/30/%E3%80%902023-09-30%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%20%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5,%20%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E3%80%81%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">Rust学习笔记（2）—— 编程基础概念, 变量、数据类型、流程控制</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/30/%E3%80%902023-09-30%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%20%E5%AE%89%E8%A3%85%E3%80%81cargo%E3%80%81crate/">Rust学习笔记（1）—— 安装、cargo、crate</a>
+          </li>
+        
+          <li>
+            <a href="/2022/05/15/%E3%80%902022-05-15%E3%80%91typescript%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%BA%94%E7%94%A8/">【2022-05-15】typescript泛型的应用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 自由の翼<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
