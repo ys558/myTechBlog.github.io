@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   
   
-  <title>Rust学习笔记（5）—— 枚举、模式匹配 | 自由の翼小栈</title>
+  <title>Rust学习笔记（5）—— 枚举 enum | 自由の翼小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="本文的参考代码在这里">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Rust学习笔记（5）—— 枚举、模式匹配">
-<meta property="og:url" content="https://zyzy.info/2023/10/08/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/index.html">
+<meta property="og:title" content="Rust学习笔记（5）—— 枚举 enum">
+<meta property="og:url" content="https://zyzy.info/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/index.html">
 <meta property="og:site_name" content="自由の翼小栈">
 <meta property="og:description" content="本文的参考代码在这里">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-07T16:39:38.000Z">
-<meta property="article:modified_time" content="2023-10-07T16:39:51.019Z">
+<meta property="article:modified_time" content="2023-10-07T16:44:22.360Z">
 <meta property="article:author" content="自由の翼">
 <meta property="article:tag" content="rust">
 <meta property="article:tag" content="enum">
@@ -79,9 +79,9 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-【2023-10-02】Rust学习笔记（5）—— 枚举 enum" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-【2023-10-08】Rust学习笔记（5）—— 枚举 enum" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2023/10/08/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/" class="article-date">
+    <a href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/" class="article-date">
   <time class="dt-published" datetime="2023-10-07T16:39:38.000Z" itemprop="datePublished">2023-10-08</time>
 </a>
     
@@ -93,7 +93,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      Rust学习笔记（5）—— 枚举、模式匹配
+      Rust学习笔记（5）—— 枚举 enum
     </h1>
   
 
@@ -125,7 +125,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://zyzy.info/2023/10/08/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/" data-id="clng9hc9q003m5fulgc0o8iw8" data-title="Rust学习笔记（5）—— 枚举、模式匹配" class="article-share-link">分享</a>
+      <a data-url="https://zyzy.info/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/" data-id="clnr4w062001xanulhkelc2wk" data-title="Rust学习笔记（5）—— 枚举 enum" class="article-share-link">分享</a>
       
       
       
@@ -192,7 +192,7 @@
       <ul>
         
           <li>
-            <a href="/2023/10/08/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/">Rust学习笔记（5）—— 枚举、模式匹配</a>
+            <a href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/">Rust学习笔记（5）—— 枚举 enum</a>
           </li>
         
           <li>
