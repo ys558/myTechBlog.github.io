@@ -4,15 +4,17 @@
   <meta charset="utf-8">
   
   
-  <title>归档: 2021/10 | 自由の翼小栈</title>
+  <title>react-18新特性 | 自由の翼小栈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="1111111111">
-<meta property="og:type" content="website">
-<meta property="og:title" content="自由の翼小栈">
-<meta property="og:url" content="https://zyzy.info/archives/2021/10/index.html">
+  <meta name="description" content="React 18 新特性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-18新特性">
+<meta property="og:url" content="https://zyzy.info/2023/10/29/%E3%80%902023-10-29%E3%80%91react-18%E6%96%B0%E7%89%B9%E6%80%A7/index.html">
 <meta property="og:site_name" content="自由の翼小栈">
-<meta property="og:description" content="1111111111">
+<meta property="og:description" content="React 18 新特性">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-29T07:29:26.000Z">
+<meta property="article:modified_time" content="2023-10-29T16:13:15.546Z">
 <meta property="article:author" content="自由の翼">
 <meta name="twitter:card" content="summary">
   
@@ -75,77 +77,79 @@
 </header>
 
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/10/28/%E3%80%902021-10-28%E3%80%91%E7%94%A8esbuil%E5%88%9B%E5%BB%BAReact%E9%A1%B9%E7%9B%AE/" class="archive-article-date">
-  <time class="dt-published" datetime="2021-10-28T06:53:06.000Z" itemprop="datePublished">10月 28</time>
+        <section id="main"><article id="post-【2023-10-29】react-18新特性" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/29/%E3%80%902023-10-29%E3%80%91react-18%E6%96%B0%E7%89%B9%E6%80%A7/" class="article-date">
+  <time class="dt-published" datetime="2023-10-29T07:29:26.000Z" itemprop="datePublished">2023-10-29</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/28/%E3%80%902021-10-28%E3%80%91%E7%94%A8esbuil%E5%88%9B%E5%BB%BAReact%E9%A1%B9%E7%9B%AE/">esbuil用于create-react-app项目的热更新开发</a>
+    <h1 class="p-name article-title" itemprop="headline name">
+      react-18新特性
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/10/26/%E3%80%902021-05-30%E3%80%91Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" class="archive-article-date">
-  <time class="dt-published" datetime="2021-10-26T09:38:14.000Z" itemprop="datePublished">10月 26</time>
-</a>
+    <div class="e-content article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/26/%E3%80%902021-05-30%E3%80%91Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/">Web性能优化（最后更新时间：2021-10-26）</a>
-    </h1>
-  
+        <p>React 18 新特性</p>
+<span id="more"></span>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/10/17/%E3%80%902021-10-17%E3%80%91%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84node-cli/" class="archive-article-date">
-  <time class="dt-published" datetime="2021-10-17T14:18:15.000Z" itemprop="datePublished">10月 17</time>
-</a>
+
+<ol>
+<li>并发模式（Concurrent Mode）：这种新的渲染模式允许在浏览器下一帧空闲时进行更新，允许多个任务同时进行，提高了渲染性能。<br>体现在代码上就是 <code>Suspense</code> 组件的应用：</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Suspense &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">const</span> loadingComponent = <span class="function">() =&gt;</span> &#123;  </span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;  </span><br><span class="line">&#125;;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">const</span> App = <span class="function">() =&gt;</span> &#123;  </span><br><span class="line">  <span class="keyword">return</span> (  </span><br><span class="line">    &lt;Suspense fallback=&#123;loadingComponent()&#125;&gt;  </span><br><span class="line">      &lt;AsyncComponent /&gt;  </span><br><span class="line">    &lt;/Suspense&gt;  </span><br><span class="line">  );  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>新的更新调度器（Update Scheduler）：这个新的更新调度器可以更细粒度地调度更新，以优化更新优先级和时间分片。</li>
+</ol>
+<p>React 18引入了一个新的更新调度器，它可以更细粒度地调度更新。这个新的调度器允许React根据任务的优先级和时间分片来安排更新。这意味着React可以根据应用程序的状态和用户交互来优化更新顺序，从而提供更好的用户体验。</p>
+<p>以下是一个示例，演示了如何使用新的更新调度器：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useState &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">const</span> Timer = <span class="function">() =&gt;</span> &#123;  </span><br><span class="line">  <span class="keyword">const</span> [time, setTime] = useState(<span class="built_in">Date</span>.now());  </span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>);  </span><br><span class="line">  </span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;  </span><br><span class="line">    <span class="keyword">const</span> timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;  </span><br><span class="line">      setTime(<span class="built_in">Date</span>.now());  </span><br><span class="line">      setCount(<span class="number">0</span>);  </span><br><span class="line">    &#125;, <span class="number">1000</span>);  </span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> <span class="built_in">clearTimeout</span>(timer);  </span><br><span class="line">  &#125;, []);  </span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> (  </span><br><span class="line">    &lt;div&gt;  </span><br><span class="line">      &lt;p&gt;Current time: &#123;time&#125;&lt;/p&gt;  </span><br><span class="line">      &lt;p&gt;Count: &#123;count&#125;&lt;/p&gt;  </span><br><span class="line">      &lt;button onClick=&#123;<span class="function">() =&gt;</span> setCount(count + <span class="number">1</span>)&#125;&gt;Increment&lt;/button&gt;  </span><br><span class="line">    &lt;/div&gt;  </span><br><span class="line">  );  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，我们使用了useState和useEffect来管理状态和执行副作用。在每一秒钟更新时间戳，并在每次点击按钮时增加计数器的值。由于新的更新调度器的引入，React可以根据优先级和时间分片来安排更新，从而提供更好的用户体验。</p>
+<ol start="3">
+<li>新的渲染API：React 18引入了新的渲染API，包括createRoot()函数和Concurrent Mode下的新的渲染函数。<br>支持SSR for Suspense：React 18现在支持服务器端渲染（SSR）和Suspense的集成，以改善首屏加载时间和用户体验。</li>
+</ol>
+<p><code>createRoot</code> api 更新前后对比：用 <code>createRoot</code> 替换 <code>render</code>。这样</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Before</span></span><br><span class="line"><span class="keyword">import</span> &#123; render &#125; <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> container = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;app&#x27;</span>);</span><br><span class="line">render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>, container);</span><br><span class="line"></span><br><span class="line"><span class="comment">// After</span></span><br><span class="line"><span class="keyword">import</span> &#123; createRoot &#125; <span class="keyword">from</span> <span class="string">&#x27;react-dom/client&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> container = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;app&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> root = createRoot(container); <span class="comment">// createRoot(container!) if you use TypeScript</span></span><br><span class="line">root.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">tab</span>=<span class="string">&quot;home&quot;</span> /&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>自动批处理（Automatic Batching）：在React 18中，当setState被调用后，并不会立即触发重新渲染。React会执行全部事件处理函数，然后触发一个单独的re-render，合并所有的更新。这样可以减少程序数据状态存在中间值导致的不稳定性，也可以提高渲染性能。</li>
+</ol>
+<p>代码的体现也同样是 <code>Suspence</code> 组件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Suspense &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">const</span> loadingComponent = <span class="function">() =&gt;</span> &#123;  </span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;  </span><br><span class="line">&#125;;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">const</span> App = <span class="function">() =&gt;</span> &#123;  </span><br><span class="line">  <span class="keyword">return</span> (  </span><br><span class="line">    &lt;Suspense fallback=&#123;loadingComponent()&#125;&gt;  </span><br><span class="line">      &#123;<span class="keyword">async</span> () =&gt; &#123;  </span><br><span class="line">        <span class="comment">// 在这里执行一些异步操作，例如数据获取等。  </span></span><br><span class="line">        <span class="keyword">const</span> data = <span class="keyword">await</span> fetchData(); <span class="comment">// 假设fetchData是一个异步操作，返回一些数据。  </span></span><br><span class="line">        <span class="keyword">return</span> (  </span><br><span class="line">          &lt;div&gt;  </span><br><span class="line">            &#123;data.map(<span class="function">(<span class="params">item</span>) =&gt;</span> (  </span><br><span class="line">              &lt;div key=&#123;item.id&#125;&gt;&#123;item.name&#125;&lt;/div&gt;  </span><br><span class="line">            ))&#125;  </span><br><span class="line">          &lt;/div&gt;  </span><br><span class="line">        );  </span><br><span class="line">      &#125;&#125;  </span><br><span class="line">    &lt;/Suspense&gt;  </span><br><span class="line">  );  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/10/17/%E3%80%902021-10-17%E3%80%91%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84node-cli/">创建自己的node cli</a>
-    </h1>
-  
-
-    </header>
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://zyzy.info/2023/10/29/%E3%80%902023-10-29%E3%80%91react-18%E6%96%B0%E7%89%B9%E6%80%A7/" data-id="clobo7f960000iwemh08n23qg" data-title="react-18新特性" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">Rust学习笔记（5）—— 枚举 enum</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 
 </section>
