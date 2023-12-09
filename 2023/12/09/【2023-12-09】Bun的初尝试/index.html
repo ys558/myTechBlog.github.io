@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>bun之初尝试 | 自由の翼小栈</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="本篇是Bun 1.0 推出后的初尝试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bun之初尝试">
+<meta property="og:url" content="https://zyzy.info/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/index.html">
+<meta property="og:site_name" content="自由の翼小栈">
+<meta property="og:description" content="本篇是Bun 1.0 推出后的初尝试。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-09T02:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-09T02:00:41.506Z">
+<meta property="article:author" content="自由の翼">
+<meta property="article:tag" content="bun">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="自由の翼小栈" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">自由の翼小栈</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">技术&amp;生活分享</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://zyzy.info"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-【2023-12-09】Bun的初尝试" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/" class="article-date">
+  <time class="dt-published" datetime="2023-12-09T02:00:00.000Z" itemprop="datePublished">2023-12-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      bun之初尝试
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>本篇是Bun 1.0 推出后的初尝试。</p>
+<span id="more"></span>
+
+<p>像Node一样，<code>Bun</code>是一个运行时(<code>runtime</code>), 而非什么新的语言。感觉deno的地位有点尴尬了。大家被他的宣传的速度所折服。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>官网推荐的是运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://bun.sh/install | bash</span><br></pre></td></tr></table></figure>
+
+<p>但鉴于国内有墙的原因，bun现在有npm包了，所以我更推荐另一种安装方法，更快更直接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g bun</span><br></pre></td></tr></table></figure>
+
+<p>用以下命令检查是否安装成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) ➜  ~ bun -v</span><br><span class="line">1.0.12</span><br></pre></td></tr></table></figure>
+
+<h2 id="启用"><a href="#启用" class="headerlink" title="启用"></a>启用</h2><h3 id="项目初始化："><a href="#项目初始化：" class="headerlink" title="项目初始化："></a>项目初始化：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir bun-learn</span><br><span class="line"><span class="built_in">cd</span> bun-learn</span><br><span class="line">bun init</span><br></pre></td></tr></table></figure>
+<p>可以看到</p>
+<ul>
+<li><code>package.json</code> 文件被 <code>bun.lockb</code> 文件替代，比起原来的json文件，这个文件写起来有点类似<code>yml</code>的语法，用了缩进和换行，不用花括号</li>
+<li>直接生成了 <code>tsconfig.json</code> 文件, bun原生支持了 <code>ts</code></li>
+</ul>
+<p>跑单个文件，和node用法类似，当然<code>run</code>可以省略：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bun run index.ts</span><br></pre></td></tr></table></figure>
+
+<h3 id="简单的服务"><a href="#简单的服务" class="headerlink" title="简单的服务"></a>简单的服务</h3><p>我们在 <code>index.ts</code> 里写上：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> server = Bun.serve(&#123;</span><br><span class="line">  port: <span class="number">5678</span>,</span><br><span class="line">  fetch (req) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Response(<span class="string">&quot;hello Bun!&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">`listening on port <span class="subst">$&#123;server.port&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+
+<p>终端跑 <code>index.ts</code> , 浏览器可以看到 <code>hello Bun!</code> 的字样。当然，直接跑的话我们改 <code>index.ts</code> 要重启项目，可以加上 <code>--watch</code> 参数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bun --watch index.ts</span><br></pre></td></tr></table></figure>
+
+<p>进一步优化，创建一个env文件<code>touch .env</code>，将配置写在该文件里，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PORT &#x3D; 8889</span><br></pre></td></tr></table></figure>
+
+<p><code>index.ts</code> 文件里 <code>port</code> 参数改：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--- port: <span class="number">5678</span>,</span><br><span class="line">+++ port: Bun.env.PORT || <span class="number">5678</span>,</span><br></pre></td></tr></table></figure>
+
+<p>可以见到，以前用<code>node</code>时，我们须安装 <code>process</code> 包，并且引入，才能用 <code>process.env.PORT</code>的，现在直接用<code>Bun</code>，课件<code>Bun</code> 把很多第三方库，如 <code>process</code> 也集成了, 无需二次下载。</p>
+<h3 id="处理路由"><a href="#处理路由" class="headerlink" title="处理路由"></a>处理路由</h3><p>把 <code>fecth</code> 函数改写如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fetch (req) &#123;</span><br><span class="line">  <span class="keyword">const</span> url = <span class="keyword">new</span> URL(req.url);</span><br><span class="line">  <span class="keyword">const</span> &#123; pathname &#125; = url;    <span class="keyword">if</span> (pathname === <span class="string">&#x27;/&#x27;</span>) <span class="keyword">return</span> <span class="keyword">new</span> Response(<span class="string">&#x27;home page!&#x27;</span>)</span><br><span class="line">  <span class="keyword">if</span> (pathname === <span class="string">&#x27;/blog&#x27;</span>) <span class="keyword">return</span> <span class="keyword">new</span> Response(<span class="string">&#x27;blog!&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Response(<span class="string">&quot;404&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="bunx"><a href="#bunx" class="headerlink" title="bunx"></a><code>bunx</code></h3><p>类似 <code>npx</code> 的使用，直接运行二进制码，无须下载安装包，他自带了个 <code>cowsay</code>命令，可以体验 <code>bunx</code>的用法，命令行运行 <code>bunx cowsay Hell Bun</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(base) ➜  bun-learn bunx cowsay Hello Bun</span><br><span class="line"> ___________</span><br><span class="line">&lt; Hello Bun &gt;</span><br><span class="line"> -----------</span><br><span class="line">        \   ^__^</span><br><span class="line">         \  (oo)\_______</span><br><span class="line">            (__)\       )\/\</span><br><span class="line">                ||----w |</span><br><span class="line">                ||     ||</span><br></pre></td></tr></table></figure>
+
+<h3 id="前端脚手架"><a href="#前端脚手架" class="headerlink" title="前端脚手架"></a>前端脚手架</h3><p><code>react</code> 官方脚手架，在 Bun中使用如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bun create react-app &lt;yourAppName&gt;</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">bunx create-react-app &lt;yourAppName&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>vite</code> 的脚手架：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bun create vite &lt;yourAppName&gt; --template vue</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">bunx create-vite &lt;yourAppName&gt; --template vue</span><br></pre></td></tr></table></figure>
+
+<h3 id="模块化引入"><a href="#模块化引入" class="headerlink" title="模块化引入"></a>模块化引入</h3><p>bun 直接支持 <code>es module</code> 和 <code>commonjs</code> 两种模块引入，也不用在 <code>package.json</code> 里做出其他配置，解决了困扰了 <code>node</code> 多年的模块引入问题。</p>
+<p>下面是一个简单的demo，新建一个文件 <code>module.ts</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch module.ts</span><br></pre></td></tr></table></figure>
+
+<p>以下我们用 <code>path</code> 模块举例：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> path <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span>;</span><br><span class="line"><span class="comment">// const path = require(&#x27;path&#x27;); // commonjs also ok</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filepath = path.join(<span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>, <span class="string">&#x27;img.png&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> filename = path.basename(filepath);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(filename);</span><br></pre></td></tr></table></figure>
+<p>跑了后控制台可看到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) ➜  bun-learn bun module.ts </span><br><span class="line">img.png</span><br></pre></td></tr></table></figure>
+
+<h3 id="一些常用模块在Bun中的使用"><a href="#一些常用模块在Bun中的使用" class="headerlink" title="一些常用模块在Bun中的使用"></a>一些常用模块在Bun中的使用</h3><h4 id="file-模块"><a href="#file-模块" class="headerlink" title="file 模块"></a><code>file</code> 模块</h4><h5 id="Bun-write-写入文件："><a href="#Bun-write-写入文件：" class="headerlink" title="Bun.write() 写入文件："></a><code>Bun.write()</code> 写入文件：</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch file-demo.ts</span><br></pre></td></tr></table></figure>
+<p>写下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = <span class="string">&#x27;I love Bun!&#x27;</span></span><br><span class="line"><span class="keyword">await</span> Bun.write(<span class="string">&#x27;file-demo.txt&#x27;</span>, data);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>从以上代码可以看出，<code>Bun</code> 和 <code>deno</code> 一样，支持<strong>顶层的 <code>await</code>语法</strong>，无须像node一样包装在 <code>async</code> 函数里使用 <code>await</code></p>
+</li>
+<li><p><code>Bun.write()</code> 接口可写入文件</p>
+</li>
+</ul>
+<p>跑 <code>bun file-demo.ts</code> 可以看到当前目录下生成了 <code>file-demo.txt</code> 文件，并在文件里写下了 data 的内容。</p>
+<h5 id="await-Bun-file-text-读取文件"><a href="#await-Bun-file-text-读取文件" class="headerlink" title="await Bun.file().text() 读取文件"></a><code>await Bun.file().text()</code> 读取文件</h5><p>在上面的代码加上：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> file = Bun.file(<span class="string">&#x27;file-demo.txt&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;file-demo content：&#x27;</span>, <span class="keyword">await</span> file.text());</span><br></pre></td></tr></table></figure>
+
+<p>控制台输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) ➜  bun-learn bun file-demo.ts</span><br><span class="line">file-demo content： I love Bun!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里值得注意，<code>Bun.file().text()</code> 是异步接口，返回的是 <code>Promise</code> 对象，所以必须用上 <code>await</code> 关键字才能显示出内容</li>
+</ul>
+<p>其他几个file的接口：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">await</span> file.stream())</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">await</span> file.arrayBuffer());</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;file size:&#x27;</span>, file.size)</span><br></pre></td></tr></table></figure>
+
+<h4 id="测试模块"><a href="#测试模块" class="headerlink" title="测试模块"></a>测试模块</h4><p>bun集成了jest的测试模块，我们在项目里直接创建测试文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch index.test.ts</span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; describe, expect, test, beforeAll &#125; <span class="keyword">from</span> <span class="string">&quot;bun:test&quot;</span>;</span><br><span class="line"></span><br><span class="line">beforeAll(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;呵呵&#x27;</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;math&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  test(<span class="string">&#x27;addition&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    expect(<span class="number">2</span>+<span class="number">1</span>).toBe(<span class="number">3</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，所有的jest模块都集成在 <code>&quot;bun:test&quot;</code> 原生包里，控制台跑的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(base) ➜  bun-learn bun <span class="built_in">test</span> </span><br><span class="line">bun <span class="built_in">test</span> v1.0.12 (85c99751)</span><br><span class="line"></span><br><span class="line">index.test.ts:</span><br><span class="line">呵呵</span><br><span class="line">✓ math &gt; addition [0.19ms]</span><br><span class="line"></span><br><span class="line"> 1 pass</span><br><span class="line"> 0 fail</span><br><span class="line"> 1 expect() calls</span><br><span class="line">Ran 1 tests across 1 files. [11.00ms]</span><br></pre></td></tr></table></figure>
+
+<h4 id="bundle-打包"><a href="#bundle-打包" class="headerlink" title="bundle 打包"></a>bundle 打包</h4><p>我们来试试用Bun 进行普通的bundle打包<br>在项目根目录创建以下文件夹和文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---src</span><br><span class="line">  |__ githubApi.ts</span><br><span class="line">  |__ index.ts</span><br></pre></td></tr></table></figure>
+
+<p><code>githubApi.ts</code>文件</p>
+<p>前端js代码打包，所以暂时不用顶层 <code>await</code> 语法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&quot;axios&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fetchUser = <span class="keyword">async</span> (user) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> axios.get(<span class="string">`https://api.github.com/users/<span class="subst">$&#123;user&#125;</span>`</span>)</span><br><span class="line">  <span class="keyword">return</span> res.data</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> fetchUser</span><br></pre></td></tr></table></figure>
+
+<p><code>index.ts</code>文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> fetchUser <span class="keyword">from</span> <span class="string">&#x27;./githubApi&#x27;</span>;</span><br><span class="line"></span><br><span class="line">(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> userData = <span class="keyword">await</span> fetchUser(<span class="string">&#x27;ys558&#x27;</span>)</span><br><span class="line">  <span class="built_in">document</span>.querySelector(<span class="string">&#x27;h1&#x27;</span>).innerHTML = <span class="built_in">JSON</span>.stringify(userData);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>在命令行里运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bun build ./src/index.ts --outfile=./dist/bundle.js</span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>dist</code>文件夹下生成了 <code>bundle.js</code> 将该文件放入 HTML的 script标签里则可使用</p>
+<p>如果开发时，可以在 bun build 的命令加上 <code>--watch</code>, 则可以热加载模式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bun build ./src/index.ts --outfile=./dist/bundle.js --watch</span><br></pre></td></tr></table></figure>
+
+<h4 id="react-在项目中的应用"><a href="#react-在项目中的应用" class="headerlink" title="react 在项目中的应用"></a>react 在项目中的应用</h4><p>在我们原来的项目里添加 <code>react</code> 和 <code>react-dom</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bun i react react-dom</span><br></pre></td></tr></table></figure>
+
+<p>src 下创建 <code>index.tsx</code> , 写一个简单的计数器：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createRoot &#125; <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> root = createRoot(<span class="built_in">document</span>.getElementById(<span class="string">&#x27;root&#x27;</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> App = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = React.useState(<span class="number">0</span>)</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Count: &#123;count&#125;&lt;/h1&gt; </span><br><span class="line">      &lt;button onClick=&#123;<span class="function">() =&gt;</span> setCount(count + <span class="number">1</span>)&#125;&gt;+&lt;/button&gt;</span><br><span class="line">      &lt;button onClick=&#123;<span class="function">() =&gt;</span> setCount(count - <span class="number">1</span>)&#125;&gt;-&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">root.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span>/&gt;</span></span>);</span><br></pre></td></tr></table></figure>
+
+<p>在 dist 目录下，创建一个根目录 <code>index.html</code>, 加上一下两行：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;root&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./bun.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>bash下运行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bun build ./src/index.tsx --outfile=./dist/budle.js --watch</span><br></pre></td></tr></table></figure>
+
+<p>打开 <code>index.html</code> 就可以看到该计数器</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://zyzy.info/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/" data-id="clpxetpde003ut5emeejmfl2a" data-title="bun之初尝试" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bun/" rel="tag">bun</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/10/29/%E3%80%902023-10-29%E3%80%91react-18%E6%96%B0%E7%89%B9%E6%80%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">react-18新特性</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Babel/" rel="tag">Babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CDN/" rel="tag">CDN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CJS/" rel="tag">CJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dart/" rel="tag">Dart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESM/" rel="tag">ESM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flutter/" rel="tag">Flutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-Page/" rel="tag">Github Page</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GraphQL/" rel="tag">GraphQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HOC/" rel="tag">HOC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IntersectionObserver/" rel="tag">IntersectionObserver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nodejs/" rel="tag">Nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Hooks/" rel="tag">React Hooks</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Query/" rel="tag">React Query</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger-UI/" rel="tag">Swagger UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Token/" rel="tag">Token</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Webpack/" rel="tag">Webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">Web性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bun/" rel="tag">bun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cargo/" rel="tag">cargo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/conventional-commit/" rel="tag">conventional commit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/enum/" rel="tag">enum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/esbuild/" rel="tag">esbuild</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/eventEmitter/" rel="tag">eventEmitter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lerna/" rel="tag">lerna</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono-repo/" rel="tag">mono repo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-cli/" rel="tag">node cli</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm-package/" rel="tag">npm package</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ownership/" rel="tag">ownership</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qiankun/" rel="tag">qiankun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-Suspense/" rel="tag">react Suspense</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rust/" rel="tag">rust</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssr/" rel="tag">ssr</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/struct/" rel="tag">struct</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swagger-jsdoc/" rel="tag">swagger-jsdoc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/type-script/" rel="tag">type script</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/umijs/" rel="tag">umijs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" rel="tag">反向代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E7%AB%AF/" rel="tag">跨端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Babel/" style="font-size: 12.5px;">Babel</a> <a href="/tags/CDN/" style="font-size: 10px;">CDN</a> <a href="/tags/CJS/" style="font-size: 10px;">CJS</a> <a href="/tags/Dart/" style="font-size: 12.5px;">Dart</a> <a href="/tags/ES/" style="font-size: 12.5px;">ES</a> <a href="/tags/ES6/" style="font-size: 10px;">ES6</a> <a href="/tags/ESM/" style="font-size: 10px;">ESM</a> <a href="/tags/Electron/" style="font-size: 10px;">Electron</a> <a href="/tags/Flutter/" style="font-size: 10px;">Flutter</a> <a href="/tags/Github-Page/" style="font-size: 10px;">Github Page</a> <a href="/tags/GraphQL/" style="font-size: 10px;">GraphQL</a> <a href="/tags/HOC/" style="font-size: 10px;">HOC</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/IntersectionObserver/" style="font-size: 10px;">IntersectionObserver</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 10px;">Nodejs</a> <a href="/tags/React/" style="font-size: 20px;">React</a> <a href="/tags/React-Hooks/" style="font-size: 10px;">React Hooks</a> <a href="/tags/React-Query/" style="font-size: 10px;">React Query</a> <a href="/tags/Swagger-UI/" style="font-size: 10px;">Swagger UI</a> <a href="/tags/Token/" style="font-size: 10px;">Token</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Webpack/" style="font-size: 15px;">Webpack</a> <a href="/tags/Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 10px;">Web性能优化</a> <a href="/tags/bun/" style="font-size: 10px;">bun</a> <a href="/tags/cargo/" style="font-size: 12.5px;">cargo</a> <a href="/tags/conventional-commit/" style="font-size: 10px;">conventional commit</a> <a href="/tags/enum/" style="font-size: 10px;">enum</a> <a href="/tags/esbuild/" style="font-size: 12.5px;">esbuild</a> <a href="/tags/eventEmitter/" style="font-size: 10px;">eventEmitter</a> <a href="/tags/flutter/" style="font-size: 10px;">flutter</a> <a href="/tags/lerna/" style="font-size: 10px;">lerna</a> <a href="/tags/mono-repo/" style="font-size: 10px;">mono repo</a> <a href="/tags/node/" style="font-size: 10px;">node</a> <a href="/tags/node-cli/" style="font-size: 10px;">node cli</a> <a href="/tags/npm-package/" style="font-size: 10px;">npm package</a> <a href="/tags/ownership/" style="font-size: 10px;">ownership</a> <a href="/tags/qiankun/" style="font-size: 10px;">qiankun</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/react-Suspense/" style="font-size: 10px;">react Suspense</a> <a href="/tags/rust/" style="font-size: 17.5px;">rust</a> <a href="/tags/ssr/" style="font-size: 10px;">ssr</a> <a href="/tags/struct/" style="font-size: 10px;">struct</a> <a href="/tags/swagger-jsdoc/" style="font-size: 10px;">swagger-jsdoc</a> <a href="/tags/type-script/" style="font-size: 15px;">type script</a> <a href="/tags/umijs/" style="font-size: 10px;">umijs</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/yarn/" style="font-size: 10px;">yarn</a> <a href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" style="font-size: 10px;">反向代理</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 12.5px;">后端</a> <a href="/tags/%E8%B7%A8%E7%AB%AF/" style="font-size: 10px;">跨端</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/">bun之初尝试</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/29/%E3%80%902023-10-29%E3%80%91react-18%E6%96%B0%E7%89%B9%E6%80%A7/">react-18新特性</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/">Rust学习笔记（5）—— 枚举 enum</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/02/%E3%80%902023-10-02%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%20%E7%BB%93%E6%9E%84%E4%BD%93%20struct/">Rust学习笔记（4）—— 结构体 struct</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/01/%E3%80%902023-10-01%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%20%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E6%89%80%E6%9C%89%E6%9D%83/">Rust学习笔记（3）—— 核心概念：所有权</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 自由の翼<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
