@@ -6,7 +6,7 @@ tags:
   - cargo
 
 ---
-![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.53/npm-package-image.png)
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.54/rust_lang.svg)
 很久没有更新博客了，最近自学 `rust`, 这里记录一下。本文参考了[Rust Book](https://doc.rust-lang.org/book/)写的
 
 <!-- more -->

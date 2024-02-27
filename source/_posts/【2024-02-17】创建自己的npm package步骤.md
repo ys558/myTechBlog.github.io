@@ -10,7 +10,7 @@ tags:
     - npm packag
 ---
 ![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.53/npm-package-image.png)
-这里分别介绍两种方法创建自己的npm package，分别是最流行的两个框架 vite 和 react。
+这里分别介绍两种方法创建自己的npm package，分别是最流行的两个框架 vite 和 react。 
 
 <!-- more -->
 
