@@ -4,10 +4,9 @@ date: 2023-09-30 08:46:38
 tags:
   - rust
   - cargo
-cover: 'https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.43/articles/monorepo简介及实现方法/cover.jpeg'
 
 ---
-
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.53/npm-package-image.png)
 很久没有更新博客了，最近自学 `rust`, 这里记录一下。本文参考了[Rust Book](https://doc.rust-lang.org/book/)写的
 
 <!-- more -->
