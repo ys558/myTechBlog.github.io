@@ -1,0 +1,602 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>Node 的多进程管理————多核CPU解决计算密集型应用 - 自由の翼小栈</title>
+
+  
+    <meta name="description" content="最近面试被问到过的问题，查了资料后，自己总结一下记录下来。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node 的多进程管理————多核CPU解决计算密集型应用">
+<meta property="og:url" content="https://zyzy.info/2024/05/20/%E3%80%902024-05-20%E3%80%91Node/index.html">
+<meta property="og:site_name" content="自由の翼小栈">
+<meta property="og:description" content="最近面试被问到过的问题，查了资料后，自己总结一下记录下来。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.59/articles/Node%E7%9A%84%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/worker_threads0.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.59/articles/Node%E7%9A%84%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/worker_threads.png">
+<meta property="article:published_time" content="2024-05-19T16:37:00.000Z">
+<meta property="article:modified_time" content="2024-05-21T11:41:31.920Z">
+<meta property="article:author" content="自由の翼">
+<meta property="article:tag" content="Node">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.59/articles/Node%E7%9A%84%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/worker_threads0.png">
+  
+  
+  
+  <meta name="keywords" content="Node">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.12/avatar/宇航员.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">自由の翼小栈</div><div class="sub cap">技术&生活分享</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/05/20/%E3%80%902024-05-20%E3%80%91Node/"><span class="title">Node 的多进程管理————多核CPU解决计算密集型应用</span></a><a class="item title" href="/2024/05/15/%E3%80%902024-05-14%E3%80%91Nginx%E9%85%8D%E7%BD%AE/"><span class="title">Nginx 简介及配置 (24-05-15)</span></a><a class="item title" href="/2024/02/29/%E3%80%902024-02-29%E3%80%91Learn%20Nextjs%20with%20TodoList%20Demo%20Project/"><span class="title">Learn Nextjs with TodoList Demo Project</span></a><a class="item title" href="/2024/02/17/%E3%80%902024-02-17%E3%80%91%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84npm%20package%E6%AD%A5%E9%AA%A4/"><span class="title">创建并发布的npm ui库(npm packages)</span></a><a class="item title" href="/2024/05/04/%E3%80%902024-05-04%E3%80%91Vue3%20learn/"><span class="title">Vue3 新特性一览</span></a><a class="item title" href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/"><span class="title">Rust学习笔记（5）—— 枚举 enum</span></a><a class="item title" href="/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/"><span class="title">bun之初尝试</span></a><a class="item title" href="/2024/04/29/%E3%80%902024-04-29%E3%80%91Node%20%E9%9D%A2%E8%AF%95%E9%A2%98/"><span class="title">Node面试题及原理总结</span></a><a class="item title" href="/2021/11/09/%E3%80%902021-11-09%E3%80%91MonoRepo%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95/"><span class="title">Mono Repo 简介及实现方法</span></a><a class="item title" href="/2023/09/30/%E3%80%902023-09-30%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%20%E5%AE%89%E8%A3%85%E3%80%81cargo%E3%80%81crate/"><span class="title">Rust学习笔记（1）—— 安装、cargo、crate</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-05-19T16:37:00.000Z">2024-05-20</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-05-21T11:41:31.920Z">2024-05-21</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Node 的多进程管理————多核CPU解决计算密集型应用</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>最近面试被问到过的问题，查了资料后，自己总结一下记录下来。</p>
+<span id="more"></span>
+
+<h2 id="问题的提出"><a href="#问题的提出" class="headerlink" title="问题的提出"></a>问题的提出</h2><p>众所周知。Node.js 是单线程的，单线程特性使得能够以较低的系统资源消耗快速处理许多请求。 有异步 I/O，所以 Node.js 是可以处理 IO 密集型任务，但是 Node.js 碰到 CPU 密集型，或者说计算密集型任务（例如机器学习，求斐波那契数列，求素数等），node 的单线程优势就往往变成劣势。</p>
+<p>有人说，那可以用他的异步队列来解决。那让我们看看 <code>Promise</code> 的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// serverWithPromises.js</span></span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&quot;express&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/isprime&quot;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> startTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">await</span> isPrime(<span class="built_in">parseInt</span>(req.query.number));</span><br><span class="line">  <span class="keyword">const</span> endTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  res.json(&#123;</span><br><span class="line">    number: <span class="built_in">parseInt</span>(req.query.number),</span><br><span class="line">    isprime: result,</span><br><span class="line">    time: endTime.getTime() - startTime.getTime() + <span class="string">&quot;ms&quot;</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/testrequest&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.send(<span class="string">&quot;I am unblocked now&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isPrime = <span class="function">(<span class="params">number</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> isPrime = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">3</span>; i &lt; number; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (number % i === <span class="number">0</span>) &#123;</span><br><span class="line">        isPrime = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    resolve(isPrime);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;listening on port 3000&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>可以看出 <code>Promise</code> 是异步的部分在 <code>.then()</code>代码里，但是他自身的阻塞是无法避免的，例如上面的代码，我们把<br><code>for (let i = 3; i &lt; number; i++)</code> 改成 <code>for (let i = 3; i &lt; 1000000000; i++)</code>，那么整个任务就会卡死。从而阻塞 <code>&#39;/testrequest&#39;</code> api 的请求。</p>
+<p>Promise 之所以在 JavaScript 社区中被推崇为“异步非阻塞操作”的一种方式，是因为 <strong>Promise 擅长完成需要更多时间而不是更多 CPU 的工作</strong>。 这里所说的“需要更多时间的工作”通常包括：数据库通信、跨服务器通信等，这也是 Web 服务器所做的 99% 的工作。</p>
+<p>JavaScript Promise 通过将任务推送到特殊队列并侦听事件（例如：数据库返回）发生并在该事件发生时执行一个回调函数，这就是著名的事件循环。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">&quot;express&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> fetch <span class="keyword">from</span> <span class="string">&quot;node-fetch&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"></span><br><span class="line"><span class="comment">// node-fetch 用于在Nodejs中发送情况</span></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/calltoslowserver&quot;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">await</span> fetch(<span class="string">&quot;http://localhost:5000/slowrequest&quot;</span>);</span><br><span class="line">  <span class="comment">// 返回一个Promise</span></span><br><span class="line">  <span class="keyword">const</span> resJson = <span class="keyword">await</span> result.json();</span><br><span class="line">  res.json(resJson);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/slowrequest&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> res.json(&#123; <span class="attr">message</span>: <span class="string">&quot;sry i was late&quot;</span> &#125;), <span class="number">20000</span>);</span><br><span class="line">  <span class="comment">// setTimeout 模拟10s的时间花销，即使花销很长时间也不会阻塞其他访问</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/testrequest&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.send(<span class="string">&quot;I am unblocked now&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">4000</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;listening on port 4000&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中可以看到，即使对 <code>/slowrequest</code> 或者 <code>/calltoslowserver</code> 的调用花费了很长时间，所有其他请求，比如：<code>/testrequest</code>，都没有被阻止。 这是因为 <code>node-fetch</code> 的 <code>fetch</code> 函数返回一个 <code>Promise</code>，而 这种单线程、非阻塞、异步的处理方式是 Node 中默认的。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>Node js 提供了三种解决方案来解决上面问题。</p>
+<h3 id="child-process-模块"><a href="#child-process-模块" class="headerlink" title="child_process 模块"></a><code>child_process</code> 模块</h3><p><code>child_process</code> 模块提供了生成拥有自己内存的新进程的能力， 这些进程之间的通信是通过 OS 提供的 IPC（Inter-process Communication）建立。</p>
+<p>该模块内部主要有 3 个 api：</p>
+<ul>
+<li><code>child_process.exec()</code></li>
+<li><code>child_process.spawn()</code></li>
+<li><code>child_process.fork()</code></li>
+</ul>
+<h4 id="exec"><a href="#exec" class="headerlink" title="exec()"></a><code>exec()</code></h4><p>该 api 允许你执行系统命令。虽然它不能直接解决 CPU 密集型任务，但你可以使用它来调用其他语言编写的程序或脚本来处理 CPU 密集型任务，如计算斐波那契数列。</p>
+<p>首先我们写一个 <code>fibonacci.py</code> 文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fibonacci.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibonacci</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> n == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> fibonacci(n-<span class="number">1</span>) + fibonacci(n-<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    n = <span class="built_in">int</span>(sys.argv[<span class="number">1</span>])</span><br><span class="line">    <span class="built_in">print</span>(fibonacci(n))</span><br></pre></td></tr></table></figure>
+
+<p>接下来，在 Express 中使用 child_process.exec() 调用这个 Python 脚本：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&quot;express&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">&quot;body-parser&quot;</span>);</span><br><span class="line"><span class="comment">// npm i express body-parser</span></span><br><span class="line"><span class="keyword">const</span> &#123; execSync, exec &#125; = <span class="built_in">require</span>(<span class="string">&quot;child_process&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">3000</span>;</span><br><span class="line"></span><br><span class="line">app.use(bodyParser.json());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 阻塞接口的示例</span></span><br><span class="line">app.post(<span class="string">&quot;/testblock&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> number = req.body.number || <span class="number">10</span>;</span><br><span class="line">  <span class="comment">// 使用 execSync 会阻塞Node.js事件循环</span></span><br><span class="line">  <span class="keyword">const</span> result = execSync(<span class="string">`python fibonacci.py <span class="subst">$&#123;number&#125;</span>`</span>).toString().trim();</span><br><span class="line">  res.json(&#123; <span class="attr">fibonacci</span>: result &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 非阻塞接口的示例</span></span><br><span class="line">app.post(<span class="string">&quot;/fibonaccipy&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> number = req.body.number || <span class="number">10</span>;</span><br><span class="line">  exec(<span class="string">`python fibonacci.py <span class="subst">$&#123;number&#125;</span>`</span>, <span class="function">(<span class="params">error, stdout, stderr</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (error) &#123;</span><br><span class="line">      <span class="keyword">return</span> res.status(<span class="number">500</span>).json(&#123; <span class="attr">error</span>: <span class="string">`执行的错误: <span class="subst">$&#123;error.message&#125;</span>`</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (stderr) &#123;</span><br><span class="line">      <span class="keyword">return</span> res.status(<span class="number">500</span>).json(&#123; <span class="attr">error</span>: <span class="string">`标准错误输出: <span class="subst">$&#123;stderr&#125;</span>`</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    res.json(&#123; <span class="attr">fibonacci</span>: stdout.trim() &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on port <span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们创建了两个 POST 接口。<code>/testblock</code>接口使用 execSync 来同步执行 Python 脚本，这会阻塞 Node.js 的事件循环，直到 Python 脚本执行完成。而<code>/fibonaccipy</code> 接口则使用 exec 来异步执行 Python 脚本，不会阻塞 Node.js 的事件循环。</p>
+<h4 id="spawn"><a href="#spawn" class="headerlink" title="spawn()"></a><code>spawn()</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&quot;express&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">&quot;child_process&quot;</span>);</span><br><span class="line"><span class="comment">// 导入child_process子进程</span></span><br><span class="line">app.get(<span class="string">&quot;/ls&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> ls = spawn(<span class="string">&quot;ls&quot;</span>, [<span class="string">&quot;-lash&quot;</span>, req.query.directory]);</span><br><span class="line">  ls.stdout.on(<span class="string">&quot;data&quot;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// stdin,stdout,stderr 管道（connection）是通过父级parent建立的</span></span><br><span class="line">    <span class="comment">// Node.js 进程和生成的子进程，可以在标准输出上监听数据事件</span></span><br><span class="line">    res.write(data.toString());</span><br><span class="line">    <span class="comment">// 日期将以流（数据块）的形式出现</span></span><br><span class="line">    <span class="comment">// 由于 res 是一个可写流，支持写入</span></span><br><span class="line">  &#125;);</span><br><span class="line">  ls.on(<span class="string">&quot;close&quot;</span>, <span class="function">(<span class="params">code</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`child process exited with code <span class="subst">$&#123;code&#125;</span>`</span>);</span><br><span class="line">    res.end();</span><br><span class="line">    <span class="comment">// 最后，当子进程退出时，所有写入的流都会被发送回来</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">7000</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;listening on port 7000&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h4 id="fork-重点关注"><a href="#fork-重点关注" class="headerlink" title="fork() 重点关注"></a><code>fork()</code> 重点关注</h4><p>child_process.fork() 专门用于生成新的 Nodejs 进程。 与 spawn 一样，返回的 childProcess 对象将具有内置的 IPC 通信通道，允许消息在父进程和子进程之间来回传递。</p>
+<p>例如以下主程序代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&quot;express&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> &#123; fork &#125; = <span class="built_in">require</span>(<span class="string">&quot;child_process&quot;</span>);</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/isprime&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> childProcess = fork(<span class="string">&quot;./forkedchild.js&quot;</span>);</span><br><span class="line">  <span class="comment">// fork() 的第一个参数是子进程要运行的 js 文件的名称</span></span><br><span class="line">  childProcess.send(&#123; <span class="attr">number</span>: <span class="built_in">parseInt</span>(req.query.number) &#125;);</span><br><span class="line">  <span class="comment">// send方法用于通过IPC向子进程发送消息</span></span><br><span class="line">  <span class="keyword">const</span> startTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">  childProcess.on(<span class="string">&quot;message&quot;</span>, <span class="function">(<span class="params">message</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// on(&quot;message&quot;)方法用于监听子进程发送的消息</span></span><br><span class="line">    <span class="keyword">const</span> endTime = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    res.json(&#123;</span><br><span class="line">      ...message,</span><br><span class="line">      time: endTime.getTime() - startTime.getTime() + <span class="string">&quot;ms&quot;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">app.get(<span class="string">&quot;/testrequest&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.send(<span class="string">&quot;I am unblocked now&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line">app.listen(<span class="number">3636</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;listening on port 3636&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>forkedchild.js</code> 文件如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">process.on(<span class="string">&quot;message&quot;</span>, <span class="function">(<span class="params">message</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">//子进程正在监听父进程的消息</span></span><br><span class="line">  <span class="keyword">const</span> result = isPrime(message.number);</span><br><span class="line">  process.send(result);</span><br><span class="line">  <span class="comment">// 使用后要exit() 防止进程孤立</span></span><br><span class="line">  process.exit();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPrime</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> isPrime = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">3</span>; i &lt; number; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (number % i === <span class="number">0</span>) &#123;</span><br><span class="line">      isPrime = <span class="literal">false</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    number: number,</span><br><span class="line">    isPrime: isPrime,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时当访问 <code>/isprime?number=29355126551</code> 时候虽然浏览器也会一直处于 loading 等待直到返回，但是此时不会阻塞后续的其他请求，比如：<code>/testrequest</code> api 的请求。</p>
+<p>总结：</p>
+<ul>
+<li>如果你需要执行一个简短的命令并获取其完整输出，可以使用 exec()。</li>
+<li>如果你需要处理大量数据或需要与子进程进行实时通信，应该使用 spawn()。</li>
+<li>如果你正在创建多个 Node.js 工作进程，并希望通过 IPC 进行通信，那么 fork() 是最佳选择。</li>
+</ul>
+<h3 id="cluster-模块"><a href="#cluster-模块" class="headerlink" title="cluster 模块"></a><code>cluster</code> 模块</h3><p>cluster 主要用于垂直（为现有机器添加更多功能）扩展 Nodejs Web 服务器，构建在 <code>child_process</code> 模块之上。 在 Http 服务器中，cluster 模块使用 <code>child_process.fork()</code> 自动 fork 进程并建立主从架构，其中父进程以循环方式将传入请求分发给子进程。 <strong>理想情况下，fork 的进程数应等于计算机具有的 CPU 核数。</strong></p>
+<p>下面示例使用 cluster 模块构建一个 Express 服务器：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">&quot;cluster&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> cpuCount = <span class="built_in">require</span>(<span class="string">&quot;os&quot;</span>).cpus().length;</span><br><span class="line"><span class="comment">// 返回cpu的核数</span></span><br><span class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</span><br><span class="line">  masterProcess();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  childProcess();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 父进程</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">masterProcess</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Master process <span class="subst">$&#123;process.pid&#125;</span> is running`</span>);</span><br><span class="line">  <span class="comment">// fork()更多 workers</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; cpuCount; i++) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Forking process number <span class="subst">$&#123;i&#125;</span>...`</span>);</span><br><span class="line">    cluster.fork();</span><br><span class="line">    <span class="comment">//creates new node js processes</span></span><br><span class="line">  &#125;</span><br><span class="line">  cluster.on(<span class="string">&quot;exit&quot;</span>, <span class="function">(<span class="params">worker, code, signal</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`worker <span class="subst">$&#123;worker.process.pid&#125;</span> died`</span>);</span><br><span class="line">    cluster.fork(); <span class="comment">//forks a new process if any process dies</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子进程</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">childProcess</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&quot;express&quot;</span>);</span><br><span class="line">  <span class="keyword">const</span> app = express();</span><br><span class="line">  <span class="comment">// workers 可以共享 TCP connection</span></span><br><span class="line">  app.get(<span class="string">&quot;/&quot;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    res.send(<span class="string">`hello from server <span class="subst">$&#123;process.pid&#125;</span>`</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  app.listen(<span class="number">5555</span>, <span class="function">() =&gt;</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`server <span class="subst">$&#123;process.pid&#125;</span> listening on port 5555`</span>)</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当运行上面的代码时，cluster.isMaster 第一次为 true 并且 masterProcess() 函数被执行。masterProcess()函数 fork()了 4 个 NodeJS 进程（依赖于设备 CPU 的核数），每当 fork()另一个进程时，都会再次运行相同的文件，但 cluster.isMaster 将返回 false，因为该进程现在是一个子进程，因为是 fork（）的，因此控制转到 else 条件。</p>
+<p>最终 childProcess() 函数执行了 4 次，并创建了 4 个 Express 服务器实例，后续请求以循环方式分发到四台服务器，从而充分利用机器的 CPU。 Node js 文档还指出，有一些内置的智能功能可以避免工作进程过载。</p>
+<p>Cluster 模块是垂直扩展简单 Nodejs 服务器的最简单、最快的方法。 但是，为了实现更高级和弹性的扩展，可以使用 docker 容器和 Kubernetes 等工具。</p>
+<h3 id="worker-threads"><a href="#worker-threads" class="headerlink" title="worker threads"></a>worker threads</h3><p><strong>本质上，工作线程和子进程之间的区别就像线程和进程之间的区别一样。理想情况下，创建的线程数应等于 cpu 核数。</strong></p>
+<p>下面演示 worker_threads 的使用。先创建一个单进程的服务器：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&quot;express&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="comment">// 求和</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumOfPrimes</span>(<span class="params">n: <span class="built_in">number</span></span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">2</span>; j &lt;= i / <span class="number">2</span>; j++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (i % j == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (j &gt; i / <span class="number">2</span>) &#123;</span><br><span class="line">      sum += i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.get(</span><br><span class="line">  <span class="string">&quot;/sumofprimes&quot;</span>,</span><br><span class="line">  (</span><br><span class="line">    &#123; <span class="attr">query</span>: &#123; <span class="built_in">number</span> &#125; &#125;: <span class="built_in">any</span>,</span><br><span class="line">    res: &#123;</span><br><span class="line">      json: <span class="function">(<span class="params">arg0: &#123; <span class="built_in">number</span>: <span class="built_in">any</span>; sum: <span class="built_in">number</span>; timeTaken: <span class="built_in">string</span> &#125;</span>) =&gt;</span> <span class="built_in">void</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  ) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> startTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="keyword">const</span> sum = sumOfPrimes(<span class="built_in">number</span> <span class="keyword">as</span> <span class="built_in">number</span>);</span><br><span class="line">    <span class="keyword">const</span> endTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    res.json(&#123;</span><br><span class="line">      <span class="built_in">number</span>: <span class="built_in">number</span>,</span><br><span class="line">      sum: sum,</span><br><span class="line">      timeTaken: (endTime - startTime) / <span class="number">1000</span> + <span class="string">&quot; seconds&quot;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">6868</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;listening on port 6868&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>当我们请求 100 万的质数之和时，我们看到以下结果：我用的电脑是 MacBook’s M1，也要足足阻塞 12 秒</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.59/articles/Node%E7%9A%84%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/worker_threads0.png" alt="花费12秒"></p>
+<p>我们把他改造为工作线程模式：主程序：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">&quot;express&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Worker &#125; <span class="keyword">from</span> <span class="string">&quot;worker_threads&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">runWorker</span>(<span class="params">workerData</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 第一个参数是worker的文件名</span></span><br><span class="line">    <span class="keyword">const</span> worker = <span class="keyword">new</span> Worker(<span class="string">&quot;./cpu密集型演示_worker_threads_质数加总.js&quot;</span>, &#123;</span><br><span class="line">      workerData,</span><br><span class="line">    &#125;);</span><br><span class="line">    worker.on(<span class="string">&quot;message&quot;</span>, resolve);</span><br><span class="line">    <span class="comment">// 当数据从worker线程返回的时候改Promise为resolve</span></span><br><span class="line">    worker.on(<span class="string">&quot;error&quot;</span>, reject);</span><br><span class="line">    worker.on(<span class="string">&quot;exit&quot;</span>, <span class="function">(<span class="params">code</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (code !== <span class="number">0</span>) &#123;</span><br><span class="line">        reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">`Worker stopped with exit code <span class="subst">$&#123;code&#125;</span>`</span>));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divideWorkAndGetSum</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 为了简单起见，对值 600000 进行硬编码分成4等份</span></span><br><span class="line">  <span class="keyword">const</span> start1 = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">const</span> end1 = <span class="number">150000</span>;</span><br><span class="line">  <span class="keyword">const</span> start2 = <span class="number">150001</span>;</span><br><span class="line">  <span class="keyword">const</span> end2 = <span class="number">300000</span>;</span><br><span class="line">  <span class="keyword">const</span> start3 = <span class="number">300001</span>;</span><br><span class="line">  <span class="keyword">const</span> end3 = <span class="number">450000</span>;</span><br><span class="line">  <span class="keyword">const</span> start4 = <span class="number">450001</span>;</span><br><span class="line">  <span class="keyword">const</span> end4 = <span class="number">600000</span>;</span><br><span class="line">  <span class="keyword">const</span> start5 = <span class="number">600001</span>;</span><br><span class="line">  <span class="keyword">const</span> end5 = <span class="number">750000</span>;</span><br><span class="line">  <span class="keyword">const</span> start6 = <span class="number">750001</span>;</span><br><span class="line">  <span class="keyword">const</span> end6 = <span class="number">900000</span>;</span><br><span class="line">  <span class="keyword">const</span> start7 = <span class="number">900001</span>;</span><br><span class="line">  <span class="keyword">const</span> end7 = <span class="number">1000000</span>;</span><br><span class="line">  <span class="comment">//   为每一个worker单独分配内容</span></span><br><span class="line">  <span class="keyword">const</span> worker1 = runWorker(&#123; <span class="attr">start</span>: start1, <span class="attr">end</span>: end1 &#125;);</span><br><span class="line">  <span class="keyword">const</span> worker2 = runWorker(&#123; <span class="attr">start</span>: start2, <span class="attr">end</span>: end2 &#125;);</span><br><span class="line">  <span class="keyword">const</span> worker3 = runWorker(&#123; <span class="attr">start</span>: start3, <span class="attr">end</span>: end3 &#125;);</span><br><span class="line">  <span class="keyword">const</span> worker4 = runWorker(&#123; <span class="attr">start</span>: start4, <span class="attr">end</span>: end4 &#125;);</span><br><span class="line">  <span class="keyword">const</span> worker5 = runWorker(&#123; <span class="attr">start</span>: start5, <span class="attr">end</span>: end5 &#125;);</span><br><span class="line">  <span class="keyword">const</span> worker6 = runWorker(&#123; <span class="attr">start</span>: start6, <span class="attr">end</span>: end6 &#125;);</span><br><span class="line">  <span class="keyword">const</span> worker7 = runWorker(&#123; <span class="attr">start</span>: start7, <span class="attr">end</span>: end7 &#125;);</span><br><span class="line">  <span class="comment">// 要求所有都resolve</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.all([</span><br><span class="line">    worker1,</span><br><span class="line">    worker2,</span><br><span class="line">    worker3,</span><br><span class="line">    worker4,</span><br><span class="line">    worker5,</span><br><span class="line">    worker6,</span><br><span class="line">    worker7,</span><br><span class="line">  ]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&quot;/sumofprimeswiththreads&quot;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> startTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">  <span class="keyword">const</span> sum = <span class="keyword">await</span> divideWorkAndGetSum()</span><br><span class="line">    .then(</span><br><span class="line">      (</span><br><span class="line">        values</span><br><span class="line">        <span class="comment">//values is an array containing all the resolved values</span></span><br><span class="line">      ) =&gt; values.reduce(<span class="function">(<span class="params">accumulator, part</span>) =&gt;</span> accumulator + part.result, <span class="number">0</span>)</span><br><span class="line">      <span class="comment">//reduce is used to sum all the results from the workers</span></span><br><span class="line">    )</span><br><span class="line">    .then(<span class="function">(<span class="params">finalAnswer</span>) =&gt;</span> finalAnswer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> endTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">  res.json(&#123;</span><br><span class="line">    number: <span class="number">1000000</span>,</span><br><span class="line">    sum: sum,</span><br><span class="line">    timeTaken: (endTime - startTime) / <span class="number">1000</span> + <span class="string">&quot; seconds&quot;</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">7777</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;listening on port 7777&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>文件 <code>cpu密集型演示_worker_threads_质数加总.js</code> :</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; workerData, parentPort &#125; <span class="keyword">from</span> <span class="string">&quot;worker_threads&quot;</span>;</span><br><span class="line"><span class="comment">// workerData 将是 multiThreadServer.js 中 Worker 构造函数的第二个参数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> start = workerData.start;</span><br><span class="line"><span class="keyword">const</span> end = workerData.end;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = start; i &lt;= end; i++) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">2</span>; j &lt;= i / <span class="number">2</span>; j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (i % j == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (j &gt; i / <span class="number">2</span>) &#123;</span><br><span class="line">    sum += i;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">parentPort.postMessage(&#123;</span><br><span class="line">  <span class="comment">// 将结果消息发送回父进程</span></span><br><span class="line">  start: start,</span><br><span class="line">  end: end,</span><br><span class="line">  result: sum,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>看一下运行时间,只有 3 秒多</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.59/articles/Node%E7%9A%84%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/worker_threads.png" alt="花费3秒多"></p>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/05/15/%E3%80%902024-05-14%E3%80%91Nginx%E9%85%8D%E7%BD%AE/">Nginx 简介及配置 (24-05-15)</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="xaoxuu/blog-comments" issue-term="pathname" theme="preferred-color-scheme"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">自由の翼</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1">Stellar 1.28.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%90%E5%87%BA"><span class="toc-text">问题的提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#child-process-%E6%A8%A1%E5%9D%97"><span class="toc-text">child_process 模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#exec"><span class="toc-text">exec()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#spawn"><span class="toc-text">spawn()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fork-%E9%87%8D%E7%82%B9%E5%85%B3%E6%B3%A8"><span class="toc-text">fork() 重点关注</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cluster-%E6%A8%A1%E5%9D%97"><span class="toc-text">cluster 模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#worker-threads"><span class="toc-text">worker threads</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  function loadUtterances() {
+    const els = document.querySelectorAll("#comments #utterances");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://utteranc.es/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadUtterances();
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
