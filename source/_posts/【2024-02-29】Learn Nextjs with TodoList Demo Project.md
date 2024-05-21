@@ -5,6 +5,8 @@ tags:
   - nextjs
   - prisma
   - sqlite
+
+cover: https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.58/nextjs-cover.png
 ---
 
 `nextjs` is a nodejs library that is a framework for building modern web apps from backend and frontend. Here I will share my experience of learning nextjs by coding a todo list demo project. Here is [my project repository](https://github.com/ys558/TodoList-demo-by-nextjs)
