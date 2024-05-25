@@ -7,6 +7,8 @@ tags:
   - K8s
   - K3s
   - minikube
+
+cover: https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.61/articles/Kubernetes/cover.webp
 ---
 
 Kubernetes 是一个开源的容器编排平台，可以轻松部署、扩展和管理容器化应用程序。这篇文章是我自学 Kubernetes 的过程，我将过程记录下来。
@@ -128,7 +130,7 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 ### 工作节点 worker node
 
-![]()
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.61/articles/Kubernetes/kuberneates_1_node_structure.png)
 
 为了能提供对外服务，每个 Node 节点上都会包含 3 个对应的服务组件，分别是:
 
@@ -142,11 +144,13 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 ### 管理节点 master node
 
-![]()
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.61/articles/Kubernetes/k8s_master_worker.png)
 
 从上图可以看出，master 节点的结构和 worker 节点完全不同，他分别包括 `API server`，`scheduler`，`control manager`， `etcd`和 `cloud control manager`，通过 `api server` 来管理所有工作节点。
 
 #### `API server`
+
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.61/articles/Kubernetes/k8s_api_server.png)
 
 就像一个集群的网关，是整个系统的入口。所有请求都会经过他，再由他分发给不同的组件进行处理。而且所有的组件间也会通过 API server 进行通信。
 
@@ -160,11 +164,13 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 例如下图：
 
-![]()
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.61/articles/Kubernetes/k8s_scheduler.png)
 
 调度器会将 pod 部署时较为空闲的节点上运行
 
 #### `controller manager`
+
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.61/articles/Kubernetes/k8s_cloud_control_manager.png)
 
 控制者管理器，复制管理集群中各种资源对象的状态。比如任何一个节点上的 pod 发生故障时，必须有一种机制监测到这个故障，尽快对其进行处理。例如重启该 pod 或者新启用一个 pod 进行替换。
 
