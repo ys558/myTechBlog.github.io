@@ -730,7 +730,6 @@ worker1   Ready    <none>                 17h   v1.29.4+k3s1   192.168.64.5   <n
 
    - 直接在 master 节点，即我们创建的 k3s 上执行`kubectl apply -n portainer -f https://downloads.portainer.io/ce2-19/portainer.yaml`
    - `-n` 参数指定 pod 的命名空间，看起来更直观，有隔离不同项目和环境的作用
-   - 本地访问 master 节点的 ip+端口号 30777，例如浏览器访问：`192.168.64.6:30777`
 
 2. 利用 `helm` 安装，安装在本地
 
@@ -777,4 +776,9 @@ portainer         Active   10m
 
 ### 访问
 
-这里我们要输入 master 节点 IP，而不是 portainer 的 IP
+这里我们要输入 master 节点的 IP，而不是 portainer 的 IP，所以本地访问 master 节点的 ip+端口号 30777，本地 master ip 用`sudo kubectl get pod -o wide`查找，例如浏览器访问 master 节点：`http://192.168.64.3:30777`
+
+可以看到访问的页面：
+
+![portainer](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.64/articles/Kubernetes/portainer1.png)
+![portainer](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.64/articles/Kubernetes/portainer2.png)
