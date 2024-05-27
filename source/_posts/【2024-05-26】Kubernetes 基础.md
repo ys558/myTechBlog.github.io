@@ -92,11 +92,15 @@ service 上图的 service 连接数据库的 pod 和 App 的 pod，当 App 访�
 
 ### Volume
 
-我们知道 pod 是很容易被销毁的，数据库的 pod 一旦被销毁，其后果可能是灾难性的。K8s 提供了 `Volume` 组件，他可以将数据库 pod 的数据，同时同步挂载到本地的磁盘上或者集群外部的远程存储上。
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/k8s_volumn.png" style="width: 80px"/>
+
+pod 是很容易被销毁的，数据库的 pod 一旦被销毁，其后果可能是灾难性的。K8s 提供了 `Volume` 组件，他可以将数据库 pod 的数据，同时同步挂载到本地的磁盘上或者集群外部的远程存储上。
 
 这样即使 pod 被销毁，数据也能持久化存储。
 
 ### Deployment
+
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/k8s_deploy.png" style="width: 80px"/>
 
 现在为止，我们还须考虑到应用程序的 pod 高可用姓，比如某个应该程序的节点发生故障，或者节点需要升级或更新维护时，应用程序就会停止服务。这显然是不能接受的。
 
@@ -115,6 +119,8 @@ service 上图的 service 连接数据库的 pod 和 App 的 pod，当 App 访�
 等高级功能。
 
 ### StatefulSet
+
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/k8s_statefulSet.png" style="width: 80px"/>
 
 相较于上面 `Deployment` 管理应用的副本，数据库其实也需要对应的副本管理工具，这个工具是 `StatefulSet`。
 
@@ -136,9 +142,9 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 为了能提供对外服务，每个 Node 节点上都会包含 3 个对应的服务组件，分别是:
 
-- `kubelet`，负责管理和维护每个节点上的 pod，也会定期从 `api-server` 组件接受新的 pod 规范，监视工作节点的运行情况，将信息汇报给 `api-server`
+- `kubelet`，负责管理和维护每个节点上的 pod，也会定期从 `api-server` 组件接受新的 pod 规范，监视工作节点的运行情况，将信息汇报给 `api-server`。同时也负责 Volume (CVI) 和网络 (CNI) 的管理。
   <img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.66/articles/Kubernetes/k8s_kubelet-128.png" style="width: 80px"/>
-- `kube-proxy`，负责为 pod 提供网络代理和负载均衡
+- `kube-proxy`，负责为 pod 提供网络代理和负载均衡。
   <img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.66/articles/Kubernetes/k8s_k-proxy-128.png" style="width: 80px"/>
 - `container runtime` 容器运行时
 
@@ -162,7 +168,7 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 ![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.65/articles/Kubernetes/k8s_api_server.png)
 
-就像一个集群的网关，是整个系统的入口。所有请求都会经过他，再由他分发给不同的组件进行处理。而且所有的组件间也会通过 API server 进行通信。
+就像一个集群的网关，是整个系统的入口。所有请求都会经过他，再由他分发给不同的组件进行处理。而且所有的组件间也会通过 API server 进行通信。提供认证、授权、访问控制、API 注册和发现等机制
 
 例如，当我们部署一个新应用 pod 时，那么可以用客户端，例如 `kubectl` 命令行，`dashboard` 或者其他的 UI 界面工具。
 
@@ -170,7 +176,7 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 #### `Scheduler`
 
-<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.65/articles/Kubernetes/Kubernetes_control_panel.png" style="width: 80px"/>
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/k8s_sched-128.png" style="width: 80px"/>
 
 负责监控集群中所有节点资源的使用情况，根据一些调度策略，将 pod 调度到合适的节点上运行。
 
@@ -184,7 +190,11 @@ k8s 是一个典型的 `master-worker`架构。所以，比如以上所提到的
 
 <img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.66/articles/Kubernetes/k8s_c-m-128.png" style="width: 80px"/>
 
-控制者管理器，复制管理集群中各种资源对象的状态。比如任何一个节点上的 pod 发生故障时，必须有一种机制监测到这个故障，尽快对其进行处理。例如重启该 pod 或者新启用一个 pod 进行替换。
+控制者管理器，复制管理集群中各种资源对象的状态。比如
+
+- 故障检测。任何一个节点上的 pod 发生故障时，必须有一种机制监测到这个故障，尽快对其进行处理。例如重启该 pod 或者新启用一个 pod 进行替换。
+- 自动扩展
+- 滚动更新
 
 controller manager 是如何知道哪个节点发生故障的呢？这就需要下面介绍的 `etcd` 组件
 
@@ -202,6 +212,8 @@ controller manager 是如何知道哪个节点发生故障的呢？这就需要�
 ![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.65/articles/Kubernetes/k8s_cloud_control_manager.png)
 
 ## minicube 搭建单节点环境
+
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/minikube.png" style="width: 80px"/>
 
 本文为了实践 k8s，在本地搭建了个模拟线上的简易版环境来学习 k8s。
 
@@ -301,7 +313,111 @@ ubuntu@k3s:~$
 
 ```
 
+### 设置 ssh 远程登录 multipass
+
+#### 设置密码登录
+
+在 K3s 虚拟机上操作：
+
+```bash
+# 登录我们上面设置的k3s虚拟机内部：
+multipass shell k3s
+# 在k3s虚拟机内部，修改sshd_config 文件：
+sudo vim /etc/ssh/sshd_config
+```
+
+打开并修改以下配置：
+
+```diff
+-- # PermitRootLogin prohibit-password
+++ PermitRootLogin yes
+
+-- # PasswordAuthentication yes
+++ PasswordAuthentication yes
+
+-- # PubkeyAuthentication yes
+++ PubkeyAuthentication yes
+```
+
+```bash
+# 重启ssh使其生效
+sudo service ssh restart
+```
+
+设置 ubuntu 用户密码，并退出虚拟机尝试用密码登录：
+
+```bash
+sudo passwd ubuntu
+exit
+```
+
+在 mac terminal 下查询虚拟机 ip 地址，并运行 ssh 登录虚拟机：
+
+```bash
+multipass ls
+ssh ubuntu@192.168.64.9
+```
+
+#### 设置 ssh 公私钥登录
+
+上面的登录步骤每次都要输入密码过于繁琐，我们可以像 GitHub 一样配置公私钥则每次登录都不需要输入密码，具体步骤如下：
+
+本地环境下生成 RSA 密钥对，我在登录 GitHub 时生成过密钥对，可以忽略这一步：
+
+```bash
+# 生成密钥对，如已生成则略过这一步
+ssh-keygen -t rsa -b 4096
+```
+
+所有密钥对会放在~/.ssh/文件夹下，显示公钥并复制所有内容
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+重新进入 `k3s` 虚拟机并粘贴我们上面复制的公钥，注意，要全个文件内容都替换，完成后退出
+
+```bash
+multipass shell k3s
+vim ~/.ssh/authorized_keys
+exit
+```
+
+在本地将私钥复制到 k3s 虚拟机上：
+
+```bash
+ssh-copy-id ubuntu@192.168.64.9
+```
+
+此时会看到复制成功的提示：
+
+![](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/ssh-copy-id.png)
+
+到这一步，已经可以用 ssh 直接登录而无需每次输入密码了，而成功设置了 ssh 登录，则上面的 `multipass shell k3s` 登录方式则会失效
+
+```bash
+ssh ubuntu@192.168.64.9
+```
+
+#### 设置别名登录
+
+上面每次都要输入 `ssh ubuntu@192.168.64.9` 登录比较麻烦，这里可以设置别名登录：
+
+本地电脑上设置 `alias`，在 terminal 上输入：
+
+```bash
+alias k3s="ssh ubuntu@192.168.64.9"
+```
+
+该命令只在当前终端有效，如果要长期生效，必须写在`~/.zshrc` 或 `~/.bash_profile`文件的最后一行，并执行 source 生效
+
+```bash
+source ~/.zshrc
+```
+
 ### `k3s` 安装
+
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/k3s-icon.png" style="width: 80px"/>
 
 登录进虚拟机后，安装 k3s 的 master 节点：
 
@@ -461,7 +577,6 @@ root@nginx-deployment-6d6565499c-bn7gd:/#
 kubectl label RESOURCE NAME KEY_1=VALUE_1 ... KEY_N=VALUE_N
 # e.g. 更新名字为nginx的Pod的标签
 kubectl label pod nginx
-
 # 删除某个资源
 kubectl delete RESOURCE NAME
 # e.g. 删除名字为nginx的Pod
@@ -736,6 +851,8 @@ worker1   Ready    <none>                 17h   v1.29.4+k3s1   192.168.64.5   <n
 ![deployment](https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.62/articles/Kubernetes/k8s_service_fr_outside.png)
 
 ## [portainer](https://www.portainer.io/) 图形界面管理工具
+
+<img src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.67/articles/Kubernetes/portainer-icon.webp" style="width: 80px"/>
 
 ### 安装及访问
 
