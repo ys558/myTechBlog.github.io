@@ -1,0 +1,720 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>Docker 自学 - 自由の翼小栈</title>
+
+  
+    <meta name="description" content="写完 Kubernetes 的笔记, 再回头来补充 Docker 的笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 自学">
+<meta property="og:url" content="https://zyzy.info/2024/05/23/%E3%80%902024-05-23%E3%80%91Docker%E8%87%AA%E5%AD%A6/index.html">
+<meta property="og:site_name" content="自由の翼小栈">
+<meta property="og:description" content="写完 Kubernetes 的笔记, 再回头来补充 Docker 的笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/hypervisor.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/hypervisor2.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/container.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/architecture.png">
+<meta property="article:published_time" content="2024-05-23T00:05:00.000Z">
+<meta property="article:modified_time" content="2024-05-31T07:11:30.928Z">
+<meta property="article:author" content="自由の翼">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/hypervisor.png">
+  
+  
+  
+  <meta name="keywords" content="Docker">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.12/avatar/宇航员.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">自由の翼小栈</div><div class="sub cap">技术&生活分享</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/05/23/%E3%80%902024-05-23%E3%80%91Docker%E8%87%AA%E5%AD%A6/"><span class="title">Docker 自学</span></a><a class="item title" href="/2024/05/26/%E3%80%902024-05-26%E3%80%91Kubernetes%20%E5%9F%BA%E7%A1%80/"><span class="title">Kubernetes 基础</span></a><a class="item title" href="/2024/05/15/%E3%80%902024-05-14%E3%80%91Nginx%E9%85%8D%E7%BD%AE/"><span class="title">Nginx 简介及配置 (24-05-15)</span></a><a class="item title" href="/2024/02/29/%E3%80%902024-02-29%E3%80%91Learn%20Nextjs%20with%20TodoList%20Demo%20Project/"><span class="title">Learn Nextjs with TodoList Demo Project</span></a><a class="item title" href="/2024/05/20/%E3%80%902024-05-20%E3%80%91Node%E5%A4%9A%E8%BF%9B%E7%A8%8B%E8%A7%A3%E5%86%B3%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B%E9%97%AE%E9%A2%98/"><span class="title">Node 的多进程管理————多核CPU解决计算密集型应用</span></a><a class="item title" href="/2024/02/17/%E3%80%902024-02-17%E3%80%91%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84npm%20package%E6%AD%A5%E9%AA%A4/"><span class="title">创建并发布的npm ui库(npm packages)</span></a><a class="item title" href="/2024/05/04/%E3%80%902024-05-04%E3%80%91Vue3%20learn/"><span class="title">Vue3 新特性一览</span></a><a class="item title" href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/"><span class="title">Rust学习笔记（5）—— 枚举 enum</span></a><a class="item title" href="/2024/04/29/%E3%80%902024-04-29%E3%80%91Node%20%E9%9D%A2%E8%AF%95%E9%A2%98/"><span class="title">Node面试题及原理总结</span></a><a class="item title" href="/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/"><span class="title">bun之初尝试</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-05-23T00:05:00.000Z">2024-05-23</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-05-31T07:11:30.928Z">2024-05-31</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Docker 自学</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>写完 <code>Kubernetes</code> 的笔记, 再回头来补充 <code>Docker</code> 的笔记。</p>
+<span id="more"></span>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
+<p>Docker helps developers build, share, run, and verify applications anywhere — without tedious environment configuration or management.<br>Docker 可以帮助开发人员在任何地方构建、共享、运行和验证应用程序，无需繁琐的环境配置或管理。</p>
+</blockquote>
+<p>这是官网对 Docker 的最有力而且简明的介绍。</p>
+<p>就像他的小鲸鱼图标, 背着很多的集装箱, 每个集装箱装着一个应用, 里面包含了不同的集装箱含有配置文件, 启动命令, 应用程序及环境变量, 第三方依赖, 运行时环境和操作系统等。运送到任何一个可以执行应用的地方.</p>
+<h3 id="Docker-和虚拟机的区别"><a href="#Docker-和虚拟机的区别" class="headerlink" title="Docker 和虚拟机的区别"></a>Docker 和虚拟机的区别</h3><p>Docker 和虚拟机都是虚拟化技术, 都可以解决应用运行环境不匹配的问题, 但是 Docker 是轻量级的虚拟化技术, 虚拟机是重量级的虚拟化技术, Docker 的优势是轻量级, 虚拟机的优势是可移植性。</p>
+<p>如下图:</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/hypervisor.png" alt="虚拟化技术"><br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/hypervisor2.png" alt="虚拟机"></p>
+<p>虚拟化技术是一种将物理资源虚拟为多个逻辑资源的技术, 每个虚拟机都分配有独立的 CPU, 操作系统, 内存, 硬盘和网络接口等等, 虚拟机之间是隔离且独立的. 这样一来, 可以将多个物理服务器分配给多个逻辑服务器. 但缺点也很明显, 尤其是安装了操作系统. 但多数时候, 我们只需要一个对外服务的 App 而已, 所以 Docker 就出现了. 他将上面虚拟机的结构简化成了容器(Container):</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/container.png" alt="容器"></p>
+<p>Docker 是一个开源的容器化技术. 自身包含了操作系统</p>
+<h3 id="Docker-的基本架构"><a href="#Docker-的基本架构" class="headerlink" title="Docker 的基本架构"></a>Docker 的基本架构</h3><p>他是一个 C/S 架构的系统, 客户端通过 Docker CLI 与 Docker Engine 通信, Docker Engine 是一个轻量级的进程管理工具, 它运行在主机上, 负责管理 Docker 容器的生命周期.</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@1.68/articles/docker/architecture.png" alt="Docker 架构"></p>
+<p>我们和 Dokcer 打交道, 都是通过 Client 客户端的, 通过图形化界面或者敲命令, 服务端我们一般接触不到的. 服务端帮我们处理这些我们发出的命令, 然后将结果返回给我们而已.</p>
+<p>而我们制作好的镜像, 通过 <code>docker push</code> 上传到 <a target="_blank" rel="noopener" href="https://hub.docker.com/">Docker Hub</a> (Registry) 仓库上, 然后通过网络 <code>docker pull</code> 下载到本地.</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a target="_blank" rel="noopener" href="https://www.docker.com/products/docker-desktop/">这里</a>安装其图形化界面, 我用的是 M1 的 Mac</p>
+<p>windows 运行前需要开启 <code>HyperVisor</code> 功能</p>
+<h2 id="镜像-Image-和-容器-Container-两个重要概念"><a href="#镜像-Image-和-容器-Container-两个重要概念" class="headerlink" title="镜像(Image) 和 容器(Container) 两个重要概念"></a>镜像(Image) 和 容器(Container) 两个重要概念</h2><ul>
+<li>Docker 镜像（Image）：镜像是一个只读的模板，可以用来创建容器；</li>
+<li>Docker 容器（Container）：容器是镜像的运行实例，它是一个独立的环境，可以在这个环境中运行应用程序，一个镜像可以创建多个容器；而我们上面提到的仓库是用来存储 Docker 镜像的地方，比如 DockerHub，我们可以在这里下载各种镜像，也可以将自己的镜像上传到这里。</li>
+</ul>
+<p>命令操作</p>
+<p>命令在实际项目中应用不多, 项目中我们经常用 <code>Dockerfile</code> 如何设计到集群, 我们还会使用 <code>Kubernetes</code> ( 关于 <code>Kubernetes</code> 可参考<a href="https://zyzy.info/2024/05/26/%E3%80%902024-05-26%E3%80%91Kubernetes%20%E5%9F%BA%E7%A1%80/">这篇文章</a>), 但命令还需要掌握一下的, 这里分为镜像命令和容器命令</p>
+<h2 id="镜像命令"><a href="#镜像命令" class="headerlink" title="镜像命令"></a>镜像命令</h2><h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker search [image]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker search --<span class="built_in">limit</span> 5 nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="拉取和上传"><a href="#拉取和上传" class="headerlink" title="拉取和上传"></a>拉取和上传</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取镜像</span></span><br><span class="line">docker pull [image]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上传镜像</span></span><br><span class="line">docker push [image]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker push zyzy/nginx:lastest</span><br><span class="line">docker push registry.cn-beijing.aliyuncs.com/zhangsan/nginx:1.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看本地镜像"><a href="#查看本地镜像" class="headerlink" title="查看本地镜像"></a>查看本地镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出本地下载的所有镜像:</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker image ls</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rmi [image]</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker image rm [image]</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建镜像</span></span><br><span class="line">docker build -t [image]:[tag] [path]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker build -t zhangsan/nginx:latest .</span><br><span class="line"><span class="comment"># or 从当前目录的 Doockerfile 构建镜像</span></span><br><span class="line">docker build .</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看镜像历史</span></span><br><span class="line">docker <span class="built_in">history</span> [image]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件导入镜像</span></span><br><span class="line">docker load -i [file]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker load -i nginx.tar</span><br><span class="line"></span><br><span class="line"><span class="comment">#  导出镜像</span></span><br><span class="line">docker save [image] &gt; FILE</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker save [image] -o FILE</span><br><span class="line"><span class="comment"># 例如</span></span><br><span class="line">docker save zhangsan/hello-docker:latest &gt; hello-docker.tar</span><br></pre></td></tr></table></figure>
+
+<h2 id="容器命令"><a href="#容器命令" class="headerlink" title="容器命令"></a>容器命令</h2><h3 id="列出所有正在运行的容器"><a href="#列出所有正在运行的容器" class="headerlink" title="列出所有正在运行的容器"></a>列出所有正在运行的容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker container ls</span><br></pre></td></tr></table></figure>
+
+<h3 id="列出所有容器"><a href="#列出所有容器" class="headerlink" title="列出所有容器"></a>列出所有容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker container ls -a</span><br></pre></td></tr></table></figure>
+
+<h3 id="仅创建"><a href="#仅创建" class="headerlink" title="仅创建"></a>仅创建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker create [image]</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建并运行"><a href="#创建并运行" class="headerlink" title="创建并运行"></a>创建并运行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行镜像</span></span><br><span class="line">docker run -d -p [host port]:[container port] [image]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker run -d -p 80:80 zhangsan/nginx:latest</span><br></pre></td></tr></table></figure>
+
+<p>参数:<br><code>-d</code>: 运行容器并进入后台<br><code>-p</code>: 映射端口<br><code>-it</code>: 运行容器并进入交互模式<br><code>-a</code>: 运行容器并进入交互模式, 并且保持 STDIN 打开并允许 tty 控制<br><code>-w</code>: 指定容器工作目录<br><code>-v</code>: 挂载卷<br><code>-e</code>: 设置环境变量, 如: <code>docker run -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=test -e MYSQL_USER=test -e MYSQL_PASSWORD=123456 mysql:5.7</code><br><code>--net=&quot;bridge&quot;</code>: 指定容器的网络连接类型，支持 bridge/host/none/container: 四种类型；<br><code>--rm</code>: 容器退出后自动删除容器文件</p>
+<p>下面, 给出一些示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个容器并在容器中执行命令（交互模式，终端，退出后删除容器）</span></span><br><span class="line">docker run -it --rm [image] [COMMAND] /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 后台运行容器, 端口映射, 挂载卷, 容器名称, 镜像</span></span><br><span class="line">docker run -d -p [hostPort]:[containerPort] -e [key=value] -w [PATH] --name [name] [image]</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行-暂停-重启"><a href="#运行-暂停-重启" class="headerlink" title="运行, 暂停, 重启"></a>运行, 暂停, 重启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker start [container]</span><br><span class="line">docker stop [container]</span><br><span class="line">docker restart [container]</span><br></pre></td></tr></table></figure>
+
+<h3 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it [container] [<span class="built_in">command</span>]</span><br><span class="line"><span class="comment"># 例如: 利用 bin/bash 的 shell 进入容器内部</span></span><br><span class="line">docker <span class="built_in">exec</span> -it zhangsan/nginx:latest /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm [container]</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker container rm [container]</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看容器-CPU-和内存占用情况"><a href="#查看容器-CPU-和内存占用情况" class="headerlink" title="查看容器 CPU 和内存占用情况"></a>查看容器 CPU 和内存占用情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stats [container]</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他容器命令"><a href="#其他容器命令" class="headerlink" title="其他容器命令"></a>其他容器命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导出容器</span></span><br><span class="line">docker <span class="built_in">export</span> [container] -o FILE</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">docker <span class="built_in">export</span> [container] &gt; FILE</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入容器</span></span><br><span class="line">docker import FILE</span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line">docker logs [container]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看容器端口映射</span></span><br><span class="line">docker port [container]</span><br><span class="line"><span class="comment"># 显示容器内进程</span></span><br><span class="line">docker top [container]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line">docker cp [FILE] [container]:[PATH]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看容器创建变化历史</span></span><br><span class="line">docker diff [container]</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据卷管理"><a href="#数据卷管理" class="headerlink" title="数据卷管理"></a>数据卷管理</h2><p>数据卷（Data Volumes）是一个可供一个或多个容器使用的特殊目录，它绕过了 UFS，可以提供很多有用的特性：</p>
+<ul>
+<li>数据卷可以在容器之间共享和重用</li>
+<li>对数据卷的修改会立马生效</li>
+<li>对数据卷的更新，不会影响镜像</li>
+<li>数据卷默认会一直存在，即使容器被删除</li>
+<li>数据卷会一直存在，直到没有容器使用</li>
+</ul>
+<p>Docker Volume 本质上是容器与主机之间共享的目录或者文件，这样 Docker Volume 中的数据可以在主机和容器中实时同步。</p>
+<p>由于容器很容易被销毁, 所以持久化的数据, 即 DB 的数据, 我们必须挂载在本地电脑上, 会自动挂载到容器中, 容器销毁后, 数据还在.</p>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker volume create [volume]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker volume create zhangsan-volume</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">docker volume ls</span><br><span class="line"></span><br><span class="line">docker volume inspect [volume]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">(base) zyzy:~ $ docker volume inspect minikube</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;CreatedAt&quot;</span>: <span class="string">&quot;2024-05-25T13:07:07Z&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Driver&quot;</span>: <span class="string">&quot;local&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Labels&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;created_by.minikube.sigs.k8s.io&quot;</span>: <span class="string">&quot;true&quot;</span>,</span><br><span class="line">            <span class="string">&quot;name.minikube.sigs.k8s.io&quot;</span>: <span class="string">&quot;minikube&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;Mountpoint&quot;</span>: <span class="string">&quot;/var/lib/docker/volumes/minikube/_data&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;minikube&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Options&quot;</span>: &#123;&#125;,</span><br><span class="line">        <span class="string">&quot;Scope&quot;</span>: <span class="string">&quot;local&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除数据卷</span></span><br><span class="line">docker volume rm [volume]</span><br><span class="line"><span class="comment"># 删除所有未使用的卷</span></span><br><span class="line">docker volume prune</span><br></pre></td></tr></table></figure>
+
+<h2 id="维护管理命令"><a href="#维护管理命令" class="headerlink" title="维护管理命令"></a>维护管理命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br><span class="line">docker [<span class="built_in">command</span>] --<span class="built_in">help</span></span><br><span class="line">docker info</span><br><span class="line"><span class="comment"># 移除所有未被使用的镜像, 容器, 卷和网络</span></span><br><span class="line">docker system prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 登录 docker hub</span></span><br><span class="line">docker login</span><br><span class="line"><span class="comment"># 登出 docker hub</span></span><br><span class="line">docker <span class="built_in">logout</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="网络命令"><a href="#网络命令" class="headerlink" title="网络命令"></a>网络命令</h2><p>Docker 默认会创建三个网络，分别是 bridge、host、none。<br>网络模式：</p>
+<ul>
+<li>bridge：桥接网络，Docker 默认使用的网络模式，使用 docker run 命令创建容器时如果不指定网络模式，那么就会使用 bridge 模式。</li>
+<li>host：主机网络，使用宿主机的网络，容器将不会获得一个独立的网络命名空间，配置和宿主机共享，容器将不会隔离宿主机网络，使用宿主机的 IP 和端口。</li>
+<li>none：无网络、禁用网络，容器拥有自己的网络命名空间，但是并不为容器进行任何网络配置，这个网络模式的容器只适合于只进行数据处理，没有任何网络的应用场景。</li>
+<li>container：容器网络，使用其他容器的网络，指定使用其他容器的网络栈。</li>
+<li>overlay：跨主机网络，用于跨多个 Docker 守护进程的容器通信，Docker 1.9 版本中增加的功能。</li>
+<li>macvlan：通过 MAC 地址绑定来实现容器访问外部网络，Docker 1.12 版本中增加的功能。</li>
+<li>ipvlan：通过 IP 地址绑定来实现容器访问外部网络，Docker 1.12 版本中增加的功能。</li>
+</ul>
+<p>命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出可用网络</span></span><br><span class="line">doocker network ls</span><br><span class="line"><span class="comment"># 查看网络详细信息</span></span><br><span class="line">docker network inspect [network]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个新网络</span></span><br><span class="line">docker network create [network]</span><br><span class="line"><span class="comment"># 删除</span></span><br><span class="line">docker network rm [network]</span><br><span class="line"><span class="comment"># 添加容器到网络</span></span><br><span class="line">docker network connect [network] [container]</span><br><span class="line"><span class="comment"># 从网络中移除容器</span></span><br><span class="line">docker network disconnect [network] [container]</span><br></pre></td></tr></table></figure>
+
+<h2 id="插件管理"><a href="#插件管理" class="headerlink" title="插件管理"></a>插件管理</h2><p>插件是 Docker 1.13 版本中引入的功能，它可以扩展 Docker 的核心功能，比如网络、存储、日志等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出所有插件</span></span><br><span class="line">docker plugin ls</span><br><span class="line"><span class="comment"># 查看某款插件详细信息</span></span><br><span class="line">docker plugin inspect [plugin]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">docker plugin install [plugin]</span><br><span class="line"><span class="comment"># 例如:</span></span><br><span class="line">docker plugin install traefik</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用:</span></span><br><span class="line">docker plugin <span class="built_in">enable</span> [plugin]</span><br><span class="line"><span class="comment"># 禁用:</span></span><br><span class="line">docker plugin <span class="built_in">disable</span> [plugin]</span><br><span class="line"><span class="comment"># 卸载, 禁用:</span></span><br><span class="line">docker plugin rm [plugin]</span><br><span class="line">docker plugin <span class="built_in">disable</span> [plugin]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><p>有点像 shell 脚本，但是语法比 shell 脚本简单.<br>Dockerfile 中包含了一条条的指令（Instruction），每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建。<br>Dockerfile 中的指令不区分大小写，但是为了可读性，建议使用大写。<br>Dockerfile 中的指令按照从上到下的顺序执行。</p>
+<h3 id="Dockerfile-Instruction"><a href="#Dockerfile-Instruction" class="headerlink" title="Dockerfile Instruction"></a>Dockerfile Instruction</h3><ul>
+<li><code>FROM</code>：指定基础镜像，必须为 Dockerfile 文件的第一条指令；</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> [base_image]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>MAINTAINER</code>: 指定镜像的维护者，可以为个人、公司、组织等；(可省)</li>
+<li><code>ADD</code>: 用于将文件拷贝到镜像中，源可以是 URL 或者本地文件，也可以是一个压缩文件（自动解压）；</li>
+<li><code>COPY</code>: 用于将文件拷贝到镜像中，源只能是本地文件；</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="bash"> src /app/src</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>WORKDIR</code>: 用于指定工作目录，后续的指令都会在该目录下执行；</li>
+<li><code>ENV</code>: 设置环境变量;</li>
+<li><code>EXPOSE</code>: 指定容器的端口号，用于映射到主机的端口号；</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>RUN</code>: 用于执行命令，可以执行任何命令，比如安装软件、编译代码、启动服务等；</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get install -y nginx</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>CMD</code>: 用于指定默认的容器主进程，每个 Dockerfile 中只能有一条 CMD 指令，如果有多条，则只有最后一条会生效；</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;node&quot;</span>, <span class="string">&quot;/app/index.js&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>ENTRYPOINT</code>: 用于指定默认的容器主进程，每个 Dockerfile 中只能有一条 ENTRYPOINT 指令，如果有多条，则只有最后一条会生效；</p>
+</li>
+<li><p><code>VOLUME</code>：用于指定持久化目录，Docker 容器中的数据不会保存在镜像中，当容器删除时，数据也会随之删除；</p>
+</li>
+<li><p><code>USER</code>：用于指定运行容器时的用户名或 UID，后续的 RUN、CMD、ENTRYPOINT 指令都会使用该用户；</p>
+</li>
+<li><p><code>HEALTHCHECK</code>：用于指定检查容器健康状况的命令，如果检查结果不是 0，则认为容器不健康，从而终止容器运行；</p>
+</li>
+<li><p><code>ONBUILD</code>：用于指定当构建一个被继承的 Dockerfile 时需要运行的命令，父镜像在被子继承后，父镜像中的 ONBUILD 指令会被执行；</p>
+</li>
+<li><p><code>LABEL</code>：用于为镜像添加元数据，可以使用多个 LABEL 指令。</p>
+</li>
+<li><p><code>STOPSIGNAL</code>：用于指定停止容器时发送的系统调用信号；</p>
+</li>
+<li><p><code>SHELL</code>：用于指定默认的 SHELL 类型，可以使用多个 SHELL 指令。</p>
+</li>
+<li><p><code>ARG</code>：用于指定构建参数，构建参数可以在构建时使用–build-arg =来指定。</p>
+</li>
+</ul>
+<h3 id="ENTRYPOINT-和-CMD的区别"><a href="#ENTRYPOINT-和-CMD的区别" class="headerlink" title="ENTRYPOINT 和 CMD的区别"></a><code>ENTRYPOINT</code> 和 <code>CMD</code>的区别</h3><p>共同点： 都是在指定的容器启动程序及参数<br>不同点：当指定了 ENTRYPOINT 后，CMD 命令会作为参数传递给 ENTRYPOINT，ENTRYPOINT 命令作为主进程运行，CMD 命令作为参数传递给主进程。</p>
+<p>以上阐述可能比较难懂，我们通过一个实例来理解：</p>
+<ol>
+<li>创建一个 Dockerfile 文件，内容如下：</li>
+</ol>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:latest</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt update &amp;&amp; apt install curl -y</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;curl&quot;</span>, <span class="string">&quot;-s&quot;</span>, <span class="string">&quot;http://ipinfo.io/ip&quot;</span> ]</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到内容很简单，就是安装 curl，然后执行 curl -s <a target="_blank" rel="noopener" href="http://ipinfo.io/ip">http://ipinfo.io/ip</a> 命令。</p>
+<ol start="2">
+<li>构建镜像：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(base) zyzy:~ $ docker build -t ubuntu-curl-demo .</span><br><span class="line">(base) zyzy:~ $ docker images</span><br><span class="line">REPOSITORY         TAG       IMAGE ID       CREATED         SIZE</span><br><span class="line">ubuntu-curl-demo   latest    61b1bfbc1cf6   3 hours ago     122MB</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>运行容器：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可以看到，正常输出了结果：</span></span><br><span class="line">(base) zyzy:~ $ docker run ubuntu-curl-demo</span><br><span class="line">202.81.228.36%</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><code>CMD</code> 命令假如运行容器时，加入参数，就会发生报错：<br>因为参数 <code>-I</code> 会覆盖 <code>CMD</code> 原来的全部参数，因此报错：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -I 参数是 curl 命令显示请求头的参数</span></span><br><span class="line">(base) zyzy:~ $ docker run ubuntu-curl-demo -I</span><br><span class="line">docker: Error response from daemon: OCI runtime create failed: container_linux.go:380: starting container process caused: <span class="built_in">exec</span>: <span class="string">&quot;-I&quot;</span>: executable file not found <span class="keyword">in</span> <span class="variable">$PATH</span>: unknown.</span><br><span class="line">ERRO[0000] error waiting <span class="keyword">for</span> container: context canceled</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>将原来 dockerfile 中的 CMD 命令改为 ENTRYPOINT 命令，重新构建镜像：</li>
+</ol>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:latest</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt update &amp;&amp; apt install curl -y</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [ <span class="string">&quot;curl&quot;</span>, <span class="string">&quot;-s&quot;</span>, <span class="string">&quot;http://ipinfo.io/ip&quot;</span> ]</span></span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>运行新的 curl-demo 容器</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(base) zyzy:~ $ docker build -t curl-demo .</span><br><span class="line">(base) zyzy:~ $ docker images</span><br><span class="line">REPOSITORY        TAG       IMAGE ID       CREATED         SIZE</span><br><span class="line">curl-demo         latest    61b1bfbc1cf6   4 hours ago     122MB</span><br><span class="line"><span class="comment"># 可以发现，现在可以正常传入参数 `-I`</span></span><br><span class="line">(base) zyzy:~ $ docker run curl-demo -I</span><br><span class="line">HTTP/1.1 405 Method Not Allowed</span><br><span class="line">allow: GET, OPTIONS</span><br><span class="line">connection: close</span><br><span class="line">content-length: 18</span><br><span class="line">content-type: text/plain; charset=utf-8</span><br><span class="line">date: Tue, 09 Apr 2024 14:09:24 GMT</span><br><span class="line">server: nginx/1.24.0</span><br><span class="line">strict-transport-security: max-age=2592000; includeSubDomains</span><br><span class="line">via: 1.1 google</span><br><span class="line">x-envoy-upstream-service-time: 0</span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h2><p>Docker Compose 是由 Docker 官方开源的项目，用于定义和运行多个 Docker 容器应用程序的工具。（Defining and running multi-container Docker applications）比如我们如果想要搭建一个网站的话，可能会用到前端、后端、数据库、甚至缓存和负载均衡等多个服务，这些服务都是独立的，但是它们之间又是有关联的，需要相互配合工作，比如后端需要连接数据库，前端需要连接后端，这些服务之间的关联关系就是 Compose 要解决的问题。它通过一个单独的 docker-compose.yml 配置文件来将这一组相互管理的容器组合在一起。</p>
+<p>Docker Compose 使用一个命名为 docker-compose.yml 的 YAML 文件来配置应用程序的服务，YAML 文件中包含了应用程序的配置信息，比如服务、网络、卷等。<br>启动一个应用程序时，只需要运行 docker-compose up 命令，Docker Compose 就会自动去查找当前目录下的 docker-compose.yml 文件，并根据这个文件来启动应用程序的所有服务。<br>当你不再需要这个应用程序时，只需要运行 docker-compose down 命令，Docker Compose 就会停止并删除所有容器、网络、卷等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up</span><br></pre></td></tr></table></figure>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/05/26/%E3%80%902024-05-26%E3%80%91Kubernetes%20%E5%9F%BA%E7%A1%80/">Kubernetes 基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/05/20/%E3%80%902024-05-20%E3%80%91Node%E5%A4%9A%E8%BF%9B%E7%A8%8B%E8%A7%A3%E5%86%B3%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B%E9%97%AE%E9%A2%98/">Node 的多进程管理————多核CPU解决计算密集型应用</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="xaoxuu/blog-comments" issue-term="pathname" theme="preferred-color-scheme"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">自由の翼</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1">Stellar 1.28.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">Docker 和虚拟机的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84"><span class="toc-text">Docker 的基本架构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F-Image-%E5%92%8C-%E5%AE%B9%E5%99%A8-Container-%E4%B8%A4%E4%B8%AA%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="toc-text">镜像(Image) 和 容器(Container) 两个重要概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">镜像命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2"><span class="toc-text">搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E5%92%8C%E4%B8%8A%E4%BC%A0"><span class="toc-text">拉取和上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F"><span class="toc-text">查看本地镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%95%9C%E5%83%8F"><span class="toc-text">删除镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA"><span class="toc-text">构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="toc-text">其他命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">容器命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E6%89%80%E6%9C%89%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="toc-text">列出所有正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E6%89%80%E6%9C%89%E5%AE%B9%E5%99%A8"><span class="toc-text">列出所有容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%85%E5%88%9B%E5%BB%BA"><span class="toc-text">仅创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E8%BF%90%E8%A1%8C"><span class="toc-text">创建并运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C-%E6%9A%82%E5%81%9C-%E9%87%8D%E5%90%AF"><span class="toc-text">运行, 暂停, 重启</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5%E5%AE%B9%E5%99%A8"><span class="toc-text">进入容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%AE%B9%E5%99%A8"><span class="toc-text">删除容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8-CPU-%E5%92%8C%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E6%83%85%E5%86%B5"><span class="toc-text">查看容器 CPU 和内存占用情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">其他容器命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7%E7%AE%A1%E7%90%86"><span class="toc-text">数据卷管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA"><span class="toc-text">创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B"><span class="toc-text">查看</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-text">删除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%B4%E6%8A%A4%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-text">维护管理命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4"><span class="toc-text">网络命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-text">插件管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile"><span class="toc-text">Dockerfile</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile-Instruction"><span class="toc-text">Dockerfile Instruction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ENTRYPOINT-%E5%92%8C-CMD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">ENTRYPOINT 和 CMD的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-Compose"><span class="toc-text">Docker Compose</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  function loadUtterances() {
+    const els = document.querySelectorAll("#comments #utterances");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://utteranc.es/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadUtterances();
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
