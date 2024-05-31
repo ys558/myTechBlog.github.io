@@ -6,7 +6,7 @@ sidebar:
     notes: #'[笔记](/notes/)'
     more: #'[更多](/more/)'
   # logo:
-  #   title: 
+  #   title:
   widgets:
     # Recent update
     recent:
@@ -23,9 +23,8 @@ sidebar:
     welcome:
       layout: markdown
       title: 欢迎
-      content: 
-        - 这里记录和分享我的技术成长日志，欢迎留言
- 
+      content:
+        - 这里记录和分享我的技术日志
 
 # 评论区
 comments:
@@ -37,4 +36,3 @@ comments:
 article:
   # 生成摘要字数：
   auto_excerpt: 200
-
