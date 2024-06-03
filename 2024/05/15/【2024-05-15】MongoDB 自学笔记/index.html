@@ -1,0 +1,847 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>MongoDB 基础自学笔记 - 自由の翼小栈</title>
+
+  
+    <meta name="description" content="最近将以前的笔记和一些常识捋了一遍，并结合最新的 MongoDB 内容，重新写了这篇文章。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB 基础自学笔记">
+<meta property="og:url" content="https://zyzy.info/2024/05/15/%E3%80%902024-05-15%E3%80%91MongoDB%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="自由の翼小栈">
+<meta property="og:description" content="最近将以前的笔记和一些常识捋了一遍，并结合最新的 MongoDB 内容，重新写了这篇文章。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-15T09:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-03T00:48:15.809Z">
+<meta property="article:author" content="自由の翼">
+<meta property="article:tag" content="MongoDB">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  <meta name="keywords" content="MongoDB">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.12/avatar/宇航员.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">自由の翼小栈</div><div class="sub cap">技术&生活分享</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/05/20/%E3%80%902024-05-20%E3%80%91Node%E5%A4%9A%E8%BF%9B%E7%A8%8B%E8%A7%A3%E5%86%B3%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B%E9%97%AE%E9%A2%98/"><span class="title">Node 的多进程管理————多核CPU解决计算密集型应用 (更新中)</span></a><a class="item title" href="/2024/05/15/%E3%80%902024-05-15%E3%80%91MongoDB%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0/"><span class="title">MongoDB 基础自学笔记</span></a><a class="item title" href="/2024/05/15/%E3%80%902024-05-14%E3%80%91Nginx%E9%85%8D%E7%BD%AE/"><span class="title">Nginx 简介及配置 (24-05-15)</span></a><a class="item title" href="/2024/05/23/%E3%80%902024-05-23%E3%80%91Docker%E8%87%AA%E5%AD%A6/"><span class="title">Docker 自学</span></a><a class="item title" href="/2024/05/26/%E3%80%902024-05-26%E3%80%91Kubernetes%20%E5%9F%BA%E7%A1%80/"><span class="title">Kubernetes 基础</span></a><a class="item title" href="/2024/02/29/%E3%80%902024-02-29%E3%80%91Learn%20Nextjs%20with%20TodoList%20Demo%20Project/"><span class="title">Learn Nextjs with TodoList Demo Project</span></a><a class="item title" href="/2024/02/17/%E3%80%902024-02-17%E3%80%91%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84npm%20package%E6%AD%A5%E9%AA%A4/"><span class="title">创建并发布的npm ui库(npm packages)</span></a><a class="item title" href="/2024/05/04/%E3%80%902024-05-04%E3%80%91Vue3%20learn/"><span class="title">Vue3 新特性一览</span></a><a class="item title" href="/2023/10/08/%E3%80%902023-10-08%E3%80%91Rust%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%20%E6%9E%9A%E4%B8%BE%20enum/"><span class="title">Rust学习笔记（5）—— 枚举 enum</span></a><a class="item title" href="/2024/04/29/%E3%80%902024-04-29%E3%80%91Node%20%E9%9D%A2%E8%AF%95%E9%A2%98/"><span class="title">Node面试题及原理总结</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-05-15T09:00:00.000Z">2024-05-15</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-06-03T00:48:15.809Z">2024-06-03</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>MongoDB 基础自学笔记</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>最近将以前的笔记和一些常识捋了一遍，并结合最新的 MongoDB 内容，重新写了这篇文章。</p>
+<span id="more"></span>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>MongoDB 是一个开源的 NoSQL 文档型数据库，它使用 BSON ( 即 Binary 的 JSON 格式 ) 文档来存储数据，而不是使用 SQL 语句来操作数据。MongoDB 是一个分布式数据库，可以 horizontal scale，可以水平扩展。</p>
+<p>业务应用场景<br>传统的关系型数据库（如 MySQL），在数据操作的“三高“需求以及应对 Web2.0 的网站需求面前，显得力不从心。</p>
+<ul>
+<li>High performance - 对数据库高并发读写的需求。</li>
+<li>Huge Storage-对海量数据的高效率存储和访问的需求。</li>
+<li>High Scalability &amp;&amp; High Availability-对数据库的高可扩展性和高可用性的需求。<br>而 MongoDB 可应对”三高”需求。</li>
+</ul>
+<p>具体的应用场景如：<br>1）社交场景，使用 MongoDB 存储存储用户信息，以及用户发表的朋友圈信息，通过地理位置索引实现附近的人、地点等功能。<br>2）游戏场景，使用 MongoDB 存储游戏用户信息，用户的装备、积分等直接以内嵌文档的形式存储，方便查询、高效率存储和访问。<br>3）物流场景，使用 MongoDB 存储订单信息，订单状态在运送过程中会不断更新，以 MongoDB 内嵌数组的形式来存储，一次查询就能将订单所有的变更读取出来。<br>4）物联网场景，使用 MongoDB 存储所有接入的智能设备信息，以及设备汇报的日志信息，并对这些信息进行多维度的分析。<br>5）视频直播，使用 MongoDB 存储用户信息、点赞互动信息等。</p>
+<p>2024 年，MongoDB 官方，宣布：</p>
+<blockquote>
+<p>MongoDB 很荣幸被评为 2023 年 Gartner® 云数据库管理系统（CDBMS）魔力象限领导者。我们相信，这使得 MongoDB 成为唯一连续两年被评为领导者的专用应用程序数据库提供商。</p>
+</blockquote>
+<p>MongoDB 现在是云数据库的领导者，在 B 端领域，尤其是工业及企业互联网，MongoDB 已经成为非常流行的数据库。</p>
+<h2 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h2><h3 id="Mac"><a href="#Mac" class="headerlink" title="Mac"></a>Mac</h3><p>参考这篇<a target="_blank" rel="noopener" href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/">官方安装文档</a></p>
+<p>我用的是 Mac 电脑， 所以安装包用 <code>Homebrew</code> 来管理即可。</p>
+<p>先安装 <code>Homebrew</code>， <code>Homebrew</code>会自动创建本地的 mongo 存储目录及 log 目录。并设置源为国内源，他是 Mac 的默认包管理工具。</p>
+<p>安装成功后，会看到 <code>mongod</code> 的版本信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(base) zyzy:~ $ mongod --version</span><br><span class="line">db version v7.0.8</span><br><span class="line">Build Info: &#123;</span><br><span class="line">    <span class="string">&quot;version&quot;</span>: <span class="string">&quot;7.0.8&quot;</span>,</span><br><span class="line">    <span class="string">&quot;gitVersion&quot;</span>: <span class="string">&quot;c5d33e55ba38d98e2f48765ec4e55338d67a4a64&quot;</span>,</span><br><span class="line">    <span class="string">&quot;modules&quot;</span>: [],</span><br><span class="line">    <span class="string">&quot;allocator&quot;</span>: <span class="string">&quot;system&quot;</span>,</span><br><span class="line">    <span class="string">&quot;environment&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;distarch&quot;</span>: <span class="string">&quot;aarch64&quot;</span>,</span><br><span class="line">        <span class="string">&quot;target_arch&quot;</span>: <span class="string">&quot;aarch64&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据上面 mongo 的安装的文档，我还碰到一个比较奇葩的问题，在运行 <code>brew services start mongodb-community@7.0</code> 时，会报错如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(base) zyzy:~ $ brew services start mongodb-community@7.0</span><br><span class="line">Error: Your Homebrew is too outdated <span class="keyword">for</span> `brew services`. Please run `brew update`!</span><br><span class="line">(base) zyzy:~ $ brew update</span><br><span class="line">HOMEBREW_BREW_GIT_REMOTE <span class="built_in">set</span>: using https://mirrors.aliyun.com/homebrew/brew.git as the Homebrew/brew Git remote.</span><br><span class="line">Already up-to-date.</span><br></pre></td></tr></table></figure>
+
+<p>我在 stack overflow 上找到了些方法：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/64821648/homebrew-fails-on-macos-big-sur">https://stackoverflow.com/questions/64821648/homebrew-fails-on-macos-big-sur</a> ，但试过之后还是无解。</p>
+<p>既然不能用 Homebrew 跑服务，那么就执行另一个命令在运行，根据官网建议，Mongo DB 在 Mac 后台运行，需跑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --config /opt/homebrew/etc/mongod.conf --fork</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mongo-Compass"><a href="#Mongo-Compass" class="headerlink" title="Mongo Compass"></a>Mongo Compass</h3><p>Mongo 官方的 GUI 界面，在<a target="_blank" rel="noopener" href="https://www.mongodb.com/try/download/compass">这里</a>下载</p>
+<h2 id="表结构"><a href="#表结构" class="headerlink" title="表结构"></a>表结构</h2><p>Mongo 和普通 SQL 数据库的区别：</p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>SQL</th>
+<th>MongoDB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据库</td>
+<td>数据库</td>
+<td>集合(collection)</td>
+</tr>
+<tr>
+<td>表</td>
+<td>表格(table)</td>
+<td>集合(collection)</td>
+</tr>
+<tr>
+<td>行</td>
+<td>行(row)</td>
+<td>文档(document)</td>
+</tr>
+<tr>
+<td>列</td>
+<td>列(column)</td>
+<td>字段(field)</td>
+</tr>
+<tr>
+<td>索引</td>
+<td>索引(index)</td>
+<td>索引(index)</td>
+</tr>
+<tr>
+<td>表连接</td>
+<td>表连接(table joins)</td>
+<td>嵌入式文档(json 嵌套格式)</td>
+</tr>
+<tr>
+<td>主键</td>
+<td>主键(primary key)</td>
+<td>自动生成的唯一标识符(_id)</td>
+</tr>
+</tbody></table>
+<h2 id="可存储数据类型"><a href="#可存储数据类型" class="headerlink" title="可存储数据类型"></a>可存储数据类型</h2><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字符串</td>
+<td>UTF-8 字符串都可表示为字符串类型的数据</td>
+<td>{“x”:”foobar”}</td>
+</tr>
+<tr>
+<td>对象 id</td>
+<td>对象 id 是文档的 12 字节的唯一 ID</td>
+<td>{“X”:ObjectId()}</td>
+</tr>
+<tr>
+<td>布尔值</td>
+<td>真或者假：true 或者 false</td>
+<td>{“x”:true}</td>
+</tr>
+<tr>
+<td>数组</td>
+<td>值的集合或者列表可以表示成数组</td>
+<td>{“x”:[“a”,”b”,”c”]}</td>
+</tr>
+<tr>
+<td>类型不可用</td>
+<td>JavaScript 仅支持 64 位浮点数，所以 shell 是不支持该类型的，shell 中默认会转换成 32 位整数，32 位整数会被自动转换成 64 位浮点数</td>
+<td></td>
+</tr>
+<tr>
+<td>64 位整数</td>
+<td>shell 中使用一个特殊的内嵌文档来显示 64 位整数</td>
+<td></td>
+</tr>
+<tr>
+<td>64 位浮点</td>
+<td>shell 中的数字就是这一种类型</td>
+<td>{“x”:3.14159,”y”:3}</td>
+</tr>
+<tr>
+<td>null</td>
+<td>表示空值或者未定义的对象</td>
+<td>{“x”:null}</td>
+</tr>
+<tr>
+<td>undefined</td>
+<td>文档中也可以使用未定义类型</td>
+<td>{“x”:undefined}</td>
+</tr>
+<tr>
+<td>符号</td>
+<td>shell 会将数据库中的符号类型的数据自动转换成字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>正则表达式</td>
+<td>文档中可以包含正则表达式，采用 JavaScript 的正则表达式语法</td>
+<td>{“x”:/foobar/i}</td>
+</tr>
+<tr>
+<td>代码</td>
+<td>文档中还可以包含 JavaScript 代码</td>
+<td>{“x”:function(/<em>…</em>/)}</td>
+</tr>
+<tr>
+<td>二进制数</td>
+<td>二进制数据可以由任意字节的串组成，不过 shell 中无法使用</td>
+<td></td>
+</tr>
+<tr>
+<td>最大值/最小值</td>
+<td>BSON 包括一个特殊类型，表示可能的最大值和最小值</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="collections"><a href="#collections" class="headerlink" title="collections"></a>collections</h2><p>在命令行输入 <code>show dbs</code> 或 <code>show databases</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; show dbs</span><br><span class="line">admin   40.00 KiB</span><br><span class="line">config  72.00 KiB</span><br><span class="line"><span class="built_in">local</span>   40.00 KiB</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>admin</code>：从权限的角度来看，这是”root”数据库。要是将一个用户添加到这个数据库，这个用户自动继承所有数据库的权限。一些特定的服务器端命令也只能从这个数据库运行，比如列出所有的数据库或者关闭服务器。1 I</li>
+<li><code>local</code>： 集群模式下，该数据永远不会被复制，可以用来存储限于本地单台服务器的任意集合。</li>
+<li><code>config</code>：当 Mongo 用于分片设置时，config 数据库在内部使用，用于保存分片的相关信息。</li>
+</ul>
+<p>MongoDB 有 3 种方式可以学习，分别是：</p>
+<ol>
+<li>CLI (Command Line Interface) 命令行模式</li>
+<li>API (Application Programming Interface) 应用程序编程接口</li>
+<li>GUI (Graphical User Interface) 图形用户界面</li>
+</ol>
+<p>以下的命令行操作，我们可以在 MongoDB 的 CLI 模式下进行。</p>
+<h3 id="数据库操作基本命令"><a href="#数据库操作基本命令" class="headerlink" title="数据库操作基本命令"></a>数据库操作基本命令</h3><table>
+<thead>
+<tr>
+<th>命令/操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>mongosh</code></td>
+<td>打开一个连接到本地实例的 MongoShell。所有其他命令都需要在<code>mongosh</code>中执行。</td>
+</tr>
+<tr>
+<td><code>show databases</code> 或 <code>show dbs</code></td>
+<td>显示当前 MongoDB 实例中的所有数据库。</td>
+</tr>
+<tr>
+<td><code>use &lt;dbname&gt;</code></td>
+<td>切换到数据库<code>&lt;dbname&gt;</code>。</td>
+</tr>
+<tr>
+<td><code>db</code></td>
+<td>显示当前使用中的数据库名称。</td>
+</tr>
+<tr>
+<td><code>cls</code></td>
+<td>清屏。</td>
+</tr>
+<tr>
+<td><code>show collections</code></td>
+<td>显示当前数据库中的所有集合。</td>
+</tr>
+<tr>
+<td><code>db.dropDatabase()</code></td>
+<td>删除当前的数据库。</td>
+</tr>
+<tr>
+<td><code>exit</code></td>
+<td>退出<code>mongosh</code>会话。</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">show dbs</span><br><span class="line">use articledb</span><br><span class="line">db.createCollection(<span class="string">&quot;my&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>操作示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">test</span>&gt; show dbs</span><br><span class="line">admin       40.00 KiB</span><br><span class="line">config     108.00 KiB</span><br><span class="line"><span class="built_in">local</span>       40.00 KiB</span><br><span class="line"><span class="built_in">test</span>&gt; use game</span><br><span class="line"><span class="comment"># 创建数据库，此时数据库还在内存里，没写到硬盘里：</span></span><br><span class="line">switched to db games</span><br><span class="line">game&gt; show dbs</span><br><span class="line">admin    40.00 KiB</span><br><span class="line">config  108.00 KiB</span><br><span class="line"><span class="built_in">local</span>    40.00 KiB</span><br><span class="line"><span class="comment"># 必须创建集合createCollection，才能show bds看到改数据库</span></span><br><span class="line"><span class="built_in">test</span>&gt; db.createCollection(<span class="string">&quot;my&quot;</span>)</span><br><span class="line">&#123; ok: 1 &#125;</span><br><span class="line">switched to db articledb</span><br><span class="line">articledb&gt; show collections</span><br><span class="line">my</span><br><span class="line"><span class="comment"># 创建完collection之后，数据库才会写到硬盘里：</span></span><br><span class="line"><span class="built_in">test</span>&gt; show dbs</span><br><span class="line">admin       40.00 KiB</span><br><span class="line">articledb    8.00 KiB</span><br><span class="line">config     108.00 KiB</span><br><span class="line"><span class="built_in">local</span>       40.00 KiB</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他数据库和表操作命令"><a href="#其他数据库和表操作命令" class="headerlink" title="其他数据库和表操作命令"></a>其他数据库和表操作命令</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 删除数据库：</span><br><span class="line">db.collection.dropDatabase()</span><br><span class="line"></span><br><span class="line"># 删除表：</span><br><span class="line">db.collection.drop()</span><br></pre></td></tr></table></figure>
+
+<h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>创建/插入</td>
+<td>在集合中插入一个新的文档</td>
+<td><code>db.users.insertOne(&#123;name: &quot;老杨&quot;&#125;)</code></td>
+</tr>
+<tr>
+<td>插入多个</td>
+<td>在集合中插入多个新的文档</td>
+<td><code>db.users.insertMany([&#123;name:&quot;李四&quot;&#125;, &#123;name: &quot;王五&quot;&#125;])</code></td>
+</tr>
+</tbody></table>
+<h3 id="插入单条数据-db-collection-insertOne"><a href="#插入单条数据-db-collection-insertOne" class="headerlink" title="插入单条数据 db.collection.insertOne()"></a>插入单条数据 <code>db.collection.insertOne()</code></h3><p>例如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.insertOne(&#123; <span class="attr">name</span>: <span class="string">&quot;zhangsan&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>查看插入的所有数据 <code>db.collection.find()</code></p>
+<p>发现刚刚插入的数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">games&gt; db.games.users.find()</span><br><span class="line">[ &#123; _id: ObjectId(<span class="string">&#x27;665a90210b1418930d2b9c8d&#x27;</span>), name: <span class="string">&#x27;zhangsan&#x27;</span> &#125; ]</span><br></pre></td></tr></table></figure>
+
+<p>MongoDB 的集合没有像 MySQL 一样有表结构，所以插入的数据没有字段限制。例如我们重新插入一条, 第二条数据多了一个 age 字段, 依然能正常插入:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">games&gt; db.users.insertOne(&#123;name: <span class="string">&#x27;张三&#x27;</span>, age:18&#125;)</span><br><span class="line">&#123;</span><br><span class="line">  acknowledged: <span class="literal">true</span>,</span><br><span class="line">  insertedId: ObjectId(<span class="string">&#x27;665a931c0b1418930d2b9c90&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">games&gt; db.users.find()</span><br><span class="line">[</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;665a90210b1418930d2b9c8d&#x27;</span>), name: <span class="string">&#x27;zhangsan&#x27;</span> &#125;,</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;665a931c0b1418930d2b9c90&#x27;</span>), name: <span class="string">&#x27;张三&#x27;</span>, age: 18 &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入多条数据-db-collection-insertMany"><a href="#插入多条数据-db-collection-insertMany" class="headerlink" title="插入多条数据 db.collection.insertMany()"></a>插入多条数据 <code>db.collection.insertMany()</code></h3><p>我们来插入一些有意义点的数据:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">db.users.insertMany([</span><br><span class="line">  &#123;name: <span class="string">&#x27;吕布&#x27;</span>, email: <span class="string">&#x27;lvbu@zyzy.info&#x27;</span>, level: 1, skills: [<span class="string">&#x27;无双&#x27;</span>, <span class="string">&#x27;战神&#x27;</span>]&#125;,</span><br><span class="line">  &#123;name: <span class="string">&#x27;赵云&#x27;</span>, email: <span class="string">&#x27;zhaoyun@zyzy.info&#x27;</span>, level: 2, skills: [<span class="string">&#x27;热血&#x27;</span>, <span class="string">&#x27;魂&#x27;</span>]&#125;,</span><br><span class="line">  &#123;name: <span class="string">&#x27;张飞&#x27;</span>, email: <span class="string">&#x27; zhangfei@zyzy.info&#x27;</span>, level: 3, skills: [<span class="string">&#x27;气合&#x27;</span>, <span class="string">&#x27;吼&#x27;</span>]&#125;,</span><br><span class="line">  &#123;name: <span class="string">&#x27;关羽&#x27;</span>, email: <span class="string">&#x27;  guanyu@zyzy.info&#x27;</span>, level: 5, skills: [<span class="string">&#x27;必杀&#x27;</span>, <span class="string">&#x27;神圣&#x27;</span>]&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<h2 id="查询-db-users-find"><a href="#查询-db-users-find" class="headerlink" title="查询 db.users.find()"></a>查询 <code>db.users.find()</code></h2><h3 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h3><p>查找 name 为吕布的数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123;name: <span class="string">&#x27;吕布&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>查找 name 名字有’张’, 只返回第一条数据:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.findOne(&#123; <span class="attr">name</span>: &#123; <span class="attr">$regex</span>: <span class="regexp">/张/</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>查找 level 为 3 的数据, 不返回 <code>email</code> 字段:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123; <span class="attr">level</span>: <span class="number">3</span> &#125;, &#123; <span class="attr">email</span>: <span class="number">0</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>查找 level 为 3 的数据, 只返回 <code>email</code> <code>skills</code> 两个字段, 不返回 <code>_id</code> 字段, 值可以为 1/0, 或者 ture/false:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123; <span class="attr">level</span>: <span class="number">3</span> &#125;, &#123; <span class="attr">email</span>: <span class="number">1</span>, <span class="attr">skills</span>: <span class="number">1</span>, <span class="attr">_id</span>: <span class="number">0</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="逻辑查询"><a href="#逻辑查询" class="headerlink" title="逻辑查询"></a>逻辑查询</h3><h4 id="gt-lt-gte-lte"><a href="#gt-lt-gte-lte" class="headerlink" title="$gt, $lt, $gte, $lte"></a><code>$gt</code>, <code>$lt</code>, <code>$gte</code>, <code>$lte</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 查找 level 大于 2 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$gt</span>: <span class="number">2</span>&#125;&#125;)</span><br><span class="line"># 查找 level 大于等于 2 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$gte</span>: <span class="number">2</span>&#125;&#125;)</span><br><span class="line"># 查找 level 小于 2 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$lt</span>: <span class="number">2</span>&#125;&#125;)</span><br><span class="line"># 查找 level 小于等于 2 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$lte</span>: <span class="number">2</span>&#125;&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="and-or-not-ne"><a href="#and-or-not-ne" class="headerlink" title="$and, $or, $not, $ne"></a><code>$and</code>, <code>$or</code>, <code>$not</code>, <code>$ne</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 查找 level 大于 2 小于等于 5 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$gt</span>: <span class="number">2</span>, <span class="attr">$lte</span>: <span class="number">5</span>&#125;&#125;)</span><br><span class="line"># 或者用 $and</span><br><span class="line">db.users.find(&#123;<span class="attr">$and</span>: [&#123;<span class="attr">level</span>: &#123;<span class="attr">$gt</span>:<span class="number">2</span>&#125;&#125;, &#123;<span class="attr">level</span>: &#123;<span class="attr">$lte</span>: <span class="number">5</span>&#125;&#125;]&#125;)</span><br><span class="line"># 查找 level 不等于5 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$ne</span>: <span class="number">5</span>&#125;&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="in-nin-exits"><a href="#in-nin-exits" class="headerlink" title="$in, $nin, $exits"></a><code>$in</code>, <code>$nin</code>, <code>$exits</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查找 level 等于 1 或 3 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$in</span>: [<span class="number">1</span>, <span class="number">3</span>]&#125;&#125;)</span><br><span class="line"># 查找 level 不等于 1 或 3 的数据:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$nin</span>: [<span class="number">1</span>, <span class="number">3</span>]&#125;&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查找 level 字段是否存在的数据, 即使该数据为 null:</span><br><span class="line">db.users.find(&#123;<span class="attr">level</span>: &#123;<span class="attr">$exists</span>: <span class="literal">true</span> &#125;&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="regex-正则"><a href="#regex-正则" class="headerlink" title="$regex 正则"></a><code>$regex</code> 正则</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123;<span class="attr">name</span>: &#123;<span class="attr">$regex</span>: <span class="regexp">/^张/</span>&#125;&#125;)</span><br><span class="line"># 忽略大小写:</span><br><span class="line">db.users.find(&#123;<span class="attr">name</span>: &#123;<span class="attr">$regex</span>: <span class="regexp">/^张/</span>, $options: <span class="string">&#x27;i&#x27;</span>&#125;&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h3><h4 id="db-users-countDocuments"><a href="#db-users-countDocuments" class="headerlink" title="db.users.countDocuments()"></a><code>db.users.countDocuments()</code></h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.countDocuments(&#123; <span class="attr">level</span>: &#123; <span class="attr">$gt</span>: <span class="number">2</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="db-collection-aggregate"><a href="#db-collection-aggregate" class="headerlink" title="db.collection.aggregate()"></a><code>db.collection.aggregate()</code></h3><p>多条件聚合, 用数组把多个条件放在一起:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.users.aggregate([</span><br><span class="line">  &#123; <span class="attr">$match</span>: &#123; <span class="attr">level</span>: &#123; <span class="attr">$gt</span>: <span class="number">2</span> &#125; &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$group</span>: &#123; <span class="attr">_id</span>: <span class="string">&quot;$level&quot;</span>, <span class="attr">count</span>: &#123; <span class="attr">$sum</span>: <span class="number">1</span> &#125; &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$sort</span>: &#123; <span class="attr">level</span>: -<span class="number">1</span> &#125; &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>得到如下结果:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123; <span class="attr">_id</span>: <span class="number">3</span>, <span class="attr">count</span>: <span class="number">1</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">_id</span>: <span class="number">5</span>, <span class="attr">count</span>: <span class="number">1</span> &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="limit"><a href="#limit" class="headerlink" title="limit()"></a><code>limit()</code></h3><p><code>limit()</code> 方法用于限制查询结果的数量, 参数传入数字 n, 表示返回前 n 条。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find().limit(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="sort"><a href="#sort" class="headerlink" title="sort()"></a><code>sort()</code></h3><p><code>sort()</code> 方法用于排序, 传入参数为对象, {字段名字: 1 或 -1}, 例如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find().sort(&#123; <span class="attr">level</span>: -<span class="number">1</span>, <span class="attr">name</span>: <span class="number">1</span> &#125;).limit(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>表示按 level 降序排列, 如果等级相同, 再按 name 升序排列, 只显示前 2 条数据。</p>
+<h3 id="skip"><a href="#skip" class="headerlink" title="skip()"></a><code>skip()</code></h3><p><code>skip()</code> 方法用于跳过指定数量的文档, 参数传入数字 n, 表示跳过前 n 条。<strong>一般和 <code>sort()</code> 一起使用, 用于分页</strong></p>
+<h2 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h2><h3 id="db-collection-updateOne-更新单条数据"><a href="#db-collection-updateOne-更新单条数据" class="headerlink" title="db.collection.updateOne() 更新单条数据"></a><code>db.collection.updateOne()</code> 更新单条数据</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.updateOne(&#123; <span class="attr">name</span>: <span class="string">&quot;吕布&quot;</span> &#125;, &#123; <span class="attr">$set</span>: &#123; <span class="attr">level</span>: <span class="number">10</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="db-collection-updateMany-更新多条数据"><a href="#db-collection-updateMany-更新多条数据" class="headerlink" title="db.collection.updateMany() 更新多条数据"></a><code>db.collection.updateMany()</code> 更新多条数据</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.updateMany(&#123; <span class="attr">level</span>: &#123; <span class="attr">$gt</span>: <span class="number">2</span> &#125; &#125;, &#123; <span class="attr">$set</span>: &#123; <span class="attr">level</span>: <span class="number">10</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><h3 id="db-collection-deleteOne-删除单条数据"><a href="#db-collection-deleteOne-删除单条数据" class="headerlink" title="db.collection.deleteOne() 删除单条数据"></a><code>db.collection.deleteOne()</code> 删除单条数据</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.deleteOne(&#123; <span class="attr">name</span>: <span class="string">&quot;吕布&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="db-collection-deleteMany-删除多条数据"><a href="#db-collection-deleteMany-删除多条数据" class="headerlink" title="db.collection.deleteMany() 删除多条数据"></a><code>db.collection.deleteMany()</code> 删除多条数据</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.deleteMany(&#123; <span class="attr">level</span>: &#123; <span class="attr">$gt</span>: <span class="number">2</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>索引是 MongoDB 数据库优化性能的重要手段, 索引能够加快查询速度, 降低磁盘 I/O 压力。</p>
+<ol>
+<li>创建 <code>db.users.createIndex()</code></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 升序</span></span><br><span class="line">db.users.createIndex(&#123; <span class="attr">level</span>: <span class="number">1</span> &#125;);</span><br><span class="line"><span class="comment">// 降序:</span></span><br><span class="line">db.users.createIndex(&#123; <span class="attr">level</span>: -<span class="number">1</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>删除 <code>db.users.dropIndex(&#123; level: 1 &#125;)</code></p>
+</li>
+<li><p>查看 <code>db.users.getIndexes()</code></p>
+</li>
+</ol>
+<h3 id="多字段索引"><a href="#多字段索引" class="headerlink" title="多字段索引"></a>多字段索引</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.createIndex(&#123; <span class="attr">level</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="number">1</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>而复合索引必须遵循最左匹配原则, 上面的索引创建成功后, 必须用:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123; <span class="attr">level</span>: &#123; $gt <span class="number">2</span>&#125;, <span class="attr">name</span>: <span class="string">&quot;吕布&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>虽然索引可以提高查询性能，但它们也会占用额外的存储空间，并可能增加插入、更新和删除操作的开销。因此，在创建索引时需要仔细权衡利弊，确保所创建的索引能够真正提升应用程序的性能。</p>
+<h2 id="性能分析-Analyze-Query-Performance"><a href="#性能分析-Analyze-Query-Performance" class="headerlink" title="性能分析 (Analyze Query Performance)"></a>性能分析 (Analyze Query Performance)</h2><p>查询语句执行时所需的时间可以通过 <code>explain()</code> 方法来查看, 语法:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.collection.find(query.options).explain(options)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123;level: 3&#125;).explain()</span><br></pre></td></tr></table></figure>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/05/20/%E3%80%902024-05-20%E3%80%91Node%E5%A4%9A%E8%BF%9B%E7%A8%8B%E8%A7%A3%E5%86%B3%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B%E9%97%AE%E9%A2%98/">Node 的多进程管理————多核CPU解决计算密集型应用 (更新中)</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/05/15/%E3%80%902024-05-14%E3%80%91Nginx%E9%85%8D%E7%BD%AE/">Nginx 简介及配置 (24-05-15)</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="xaoxuu/blog-comments" issue-term="pathname" theme="preferred-color-scheme"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">自由の翼</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1">Stellar 1.28.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%EF%BC%9A"><span class="toc-text">安装：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac"><span class="toc-text">Mac</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mongo-Compass"><span class="toc-text">Mongo Compass</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-text">表结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">可存储数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#collections"><span class="toc-text">collections</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-text">数据库操作基本命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-text">其他数据库和表操作命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-text">插入数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E5%8D%95%E6%9D%A1%E6%95%B0%E6%8D%AE-db-collection-insertOne"><span class="toc-text">插入单条数据 db.collection.insertOne()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E5%A4%9A%E6%9D%A1%E6%95%B0%E6%8D%AE-db-collection-insertMany"><span class="toc-text">插入多条数据 db.collection.insertMany()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2-db-users-find"><span class="toc-text">查询 db.users.find()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2"><span class="toc-text">条件查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E6%9F%A5%E8%AF%A2"><span class="toc-text">逻辑查询</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#gt-lt-gte-lte"><span class="toc-text">$gt, $lt, $gte, $lte</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#and-or-not-ne"><span class="toc-text">$and, $or, $not, $ne</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#in-nin-exits"><span class="toc-text">$in, $nin, $exits</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#regex-%E6%AD%A3%E5%88%99"><span class="toc-text">$regex 正则</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">聚合查询</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#db-users-countDocuments"><span class="toc-text">db.users.countDocuments()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#db-collection-aggregate"><span class="toc-text">db.collection.aggregate()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#limit"><span class="toc-text">limit()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sort"><span class="toc-text">sort()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#skip"><span class="toc-text">skip()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="toc-text">更新数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#db-collection-updateOne-%E6%9B%B4%E6%96%B0%E5%8D%95%E6%9D%A1%E6%95%B0%E6%8D%AE"><span class="toc-text">db.collection.updateOne() 更新单条数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#db-collection-updateMany-%E6%9B%B4%E6%96%B0%E5%A4%9A%E6%9D%A1%E6%95%B0%E6%8D%AE"><span class="toc-text">db.collection.updateMany() 更新多条数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#db-collection-deleteOne-%E5%88%A0%E9%99%A4%E5%8D%95%E6%9D%A1%E6%95%B0%E6%8D%AE"><span class="toc-text">db.collection.deleteOne() 删除单条数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#db-collection-deleteMany-%E5%88%A0%E9%99%A4%E5%A4%9A%E6%9D%A1%E6%95%B0%E6%8D%AE"><span class="toc-text">db.collection.deleteMany() 删除多条数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%AD%97%E6%AE%B5%E7%B4%A2%E5%BC%95"><span class="toc-text">多字段索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90-Analyze-Query-Performance"><span class="toc-text">性能分析 (Analyze Query Performance)</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  function loadUtterances() {
+    const els = document.querySelectorAll("#comments #utterances");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://utteranc.es/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadUtterances();
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
