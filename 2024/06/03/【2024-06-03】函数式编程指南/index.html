@@ -1,0 +1,803 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>js 的函数式编程 (更新至 2024-06-12) - 自由の翼小栈</title>
+
+  
+    <meta name="description" content="函数式编程, 近年来逐渐由学术领域向商用领域渗透, 比起传统的OOP, 函数式编程有着非常大的优势, 逻辑清晰, 确定的输入输出, 可以随意组合, 且易于扩展. 对于 js 的函数式编程, 某些标准仍未列入 ES 规则中, 所以, 这里将 Scala 这种纯函数标准编程作为对比, 让我对函数式编程理解更加深刻. 本文代码可以看这个仓库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js 的函数式编程 (更新至 2024-06-12)">
+<meta property="og:url" content="https://zyzy.info/2024/06/03/%E3%80%902024-06-03%E3%80%91%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="自由の翼小栈">
+<meta property="og:description" content="函数式编程, 近年来逐渐由学术领域向商用领域渗透, 比起传统的OOP, 函数式编程有着非常大的优势, 逻辑清晰, 确定的输入输出, 可以随意组合, 且易于扩展. 对于 js 的函数式编程, 某些标准仍未列入 ES 规则中, 所以, 这里将 Scala 这种纯函数标准编程作为对比, 让我对函数式编程理解更加深刻. 本文代码可以看这个仓库">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-03T01:10:43.000Z">
+<meta property="article:modified_time" content="2024-06-12T09:17:13.314Z">
+<meta property="article:author" content="自由の翼">
+<meta property="article:tag" content="函数式编程">
+<meta property="article:tag" content="编程思想">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <meta name="keywords" content="函数式编程,编程思想">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://cdn.jsdelivr.net/gh/ys558/my-blog-imgs@0.12/avatar/宇航员.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">自由の翼小栈</div><div class="sub cap">技术&生活分享</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/06/03/%E3%80%902024-06-03%E3%80%91%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/"><span class="title">js 的函数式编程 (更新至 2024-06-12)</span></a><a class="item title" href="/2024/05/20/%E3%80%902024-05-20%E3%80%91Node%E5%A4%9A%E8%BF%9B%E7%A8%8B%E8%A7%A3%E5%86%B3%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B%E9%97%AE%E9%A2%98/"><span class="title">Node 的多进程管理————多核CPU解决计算密集型应用 (更新中)</span></a><a class="item title" href="/2024/05/15/%E3%80%902024-05-15%E3%80%91MongoDB%20%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0/"><span class="title">MongoDB 基础自学笔记</span></a><a class="item title" href="/2024/05/15/%E3%80%902024-05-14%E3%80%91Nginx%E9%85%8D%E7%BD%AE/"><span class="title">Nginx 简介及配置 (24-05-15)</span></a><a class="item title" href="/2024/05/23/%E3%80%902024-05-23%E3%80%91Docker%E8%87%AA%E5%AD%A6/"><span class="title">Docker 自学</span></a><a class="item title" href="/2024/05/26/%E3%80%902024-05-26%E3%80%91Kubernetes%20%E5%9F%BA%E7%A1%80/"><span class="title">Kubernetes 基础</span></a><a class="item title" href="/2024/02/29/%E3%80%902024-02-29%E3%80%91Learn%20Nextjs%20with%20TodoList%20Demo%20Project/"><span class="title">Learn Nextjs with TodoList Demo Project</span></a><a class="item title" href="/2024/02/17/%E3%80%902024-02-17%E3%80%91%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84npm%20package%E6%AD%A5%E9%AA%A4/"><span class="title">创建并发布的npm ui库(npm packages)</span></a><a class="item title" href="/2024/05/04/%E3%80%902024-05-04%E3%80%91Vue3%20learn/"><span class="title">Vue3 新特性一览</span></a><a class="item title" href="/2023/12/09/%E3%80%902023-12-09%E3%80%91Bun%E7%9A%84%E5%88%9D%E5%B0%9D%E8%AF%95/"><span class="title">bun之初尝试</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-06-03T01:10:43.000Z">2024-06-03</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-06-12T09:17:13.314Z">2024-06-12</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>js 的函数式编程 (更新至 2024-06-12)</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>函数式编程, 近年来逐渐由学术领域向商用领域渗透, 比起传统的<code>OOP</code>, 函数式编程有着非常大的优势, 逻辑清晰, 确定的输入输出, 可以随意组合, 且易于扩展.</p>
+<p>对于 js 的函数式编程, 某些标准仍未列入 ES 规则中, 所以, 这里将 <code>Scala</code> 这种纯函数标准编程作为对比, 让我对函数式编程理解更加深刻.</p>
+<p>本文代码可以看这个<a target="_blank" rel="noopener" href="https://github.com/ys558/functional-programming-by-js">仓库</a></p>
+<span id="more"></span>
+
+<h2 id="函数作为一等公民"><a href="#函数作为一等公民" class="headerlink" title="函数作为一等公民"></a>函数作为一等公民</h2><p>函数式编程, 是一个古老的概念, 甚至比计算机的诞生还早, 并伴随着 <code>React</code> 的流行带火的, <code>React</code> 是其最有力的推广者. 而跟着火爆的 <code>js</code> 并不是纯函数语言, 现在较为主流的纯函数语言, 包括诸如: <code>Haskell</code>, <code>Rust</code>, <code>Scala</code>, <code>Clojure</code>, <code>Erlang</code>, <code>F#</code> 等等. 他们有些语法特性, 是 <code>js</code> 所缺少的, 例如 <code>Haskell</code> 摒弃了大多数语言的 <code>loop</code> 循环(<code>for</code>, <code>while</code>), 进而使用递归和高阶函数来处理迭代. 几乎所有的函数式语言都具备的 <strong>模式匹配（Pattern Matching）</strong> 和 <strong>Monad（如 Option、Either、Future）等特性</strong>. 这些都是 <code>js</code> 缺少的, 本文来讨论这些问题.</p>
+<h3 id="函数既可以作为参数-也可以作为返回值"><a href="#函数既可以作为参数-也可以作为返回值" class="headerlink" title="函数既可以作为参数, 也可以作为返回值"></a>函数既可以作为参数, 也可以作为返回值</h3><p>函数作为一等公民, 函数可以作为参数, 也可以作为返回值, 如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这行</span></span><br><span class="line">ajaxCall(<span class="function">(<span class="params">json</span>) =&gt;</span> callback(json));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等价于这行 --&gt; 函数作为参数</span></span><br><span class="line">ajaxCall(callback);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 那么，重构下 getServerStuff</span></span><br><span class="line"><span class="keyword">const</span> getServerStuff = <span class="function">(<span class="params">callback</span>) =&gt;</span> ajaxCall(callback);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...就等于 --&gt; 函数作为返回值</span></span><br><span class="line"><span class="keyword">const</span> getServerStuff = ajaxCall; <span class="comment">// &lt;-- 看，没有括号哦</span></span><br></pre></td></tr></table></figure>
+
+<p>这种简化可以使得代码更简洁, 更容易理解, 更容易扩展.</p>
+<h3 id="命名的通用性-使得后期易于扩展"><a href="#命名的通用性-使得后期易于扩展" class="headerlink" title="命名的通用性, 使得后期易于扩展"></a>命名的通用性, 使得后期易于扩展</h3><p>作者举例:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只针对当前的博客</span></span><br><span class="line"><span class="keyword">const</span> validArticles = <span class="function"><span class="params">articles</span> =&gt;</span></span><br><span class="line">  articles.filter(<span class="function"><span class="params">article</span> =&gt;</span> article !== <span class="literal">null</span> &amp;&amp; article !== <span class="literal">undefined</span>),</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对未来的项目更友好</span></span><br><span class="line"><span class="keyword">const</span> compact = <span class="function"><span class="params">xs</span> =&gt;</span> xs.filter(<span class="function"><span class="params">x</span> =&gt;</span> x !== <span class="literal">null</span> &amp;&amp; x !== <span class="literal">undefined</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>xs</code>, <code>x</code> 这种命名是通用的, 容易理解, 容易扩展. 使得我们避免重复造轮子</p>
+<h3 id="JS-的-bug-this"><a href="#JS-的-bug-this" class="headerlink" title="JS 的 bug: this"></a>JS 的 bug: <code>this</code></h3><p>作者极力反对在 <code>this</code> 上做操作</p>
+<blockquote>
+<p><code>this</code> 就像一块脏尿布，我尽可能地避免使用它，因为在函数式编程中根本用不到它。… 也有人反驳说 <code>this</code> 能提高执行速度。如果你是这种对速度吹毛求疵的人，那你还是合上这本书吧。要是没法退货退款，也许你可以去换一本更入门的书来读。</p>
+</blockquote>
+<h2 id="纯函数-Pure-Function"><a href="#纯函数-Pure-Function" class="headerlink" title="纯函数 Pure Function"></a>纯函数 Pure Function</h2><blockquote>
+<p>纯函数是这样一种函数，即相同的输入，永远会得到相同的输出，而且没有任何可观察的副作用。</p>
+</blockquote>
+<blockquote>
+<p>副作用是在计算结果的过程中，系统状态的一种变化，或者与外部世界进行的可观察的交互。</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>副作用可能包含，但不限于：<br>更改文件系统<br>往数据库插入记录<br>发送一个 http 请求<br>可变数据<br>打印/log<br>获取用户输入<br>DOM 查询<br>访问系统状态<br>…</p>
+</blockquote>
+</blockquote>
+<p>原书举了一个很好的例子说明纯函数的概念, 即 <code>slice</code> 和 <code>splice</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xs = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 纯的</span></span><br><span class="line">xs.slice(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// [1,2,3]</span></span><br><span class="line">xs.slice(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// [1,2,3]</span></span><br><span class="line">xs.slice(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// [1,2,3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不纯的</span></span><br><span class="line">xs.splice(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// [1,2,3]</span></span><br><span class="line">xs.splice(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// [4,5]</span></span><br><span class="line">xs.splice(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// []</span></span><br></pre></td></tr></table></figure>
+
+<p>从上面的示例可以看出</p>
+<ul>
+<li><code>slice</code> 是纯函数, 因为无论调用多少次, 都会返回相同的结果.</li>
+<li><code>splice</code> 不是纯函数, 因为每次调用都会改变原数组, 并且返回值也不一样.</li>
+</ul>
+<p>另一个例子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不纯的: checkAge的值取决于外部变量</span></span><br><span class="line"><span class="keyword">let</span> minimum = <span class="number">21</span>;</span><br><span class="line"><span class="keyword">const</span> checkAge = <span class="function">(<span class="params">age</span>) =&gt;</span> age &gt; minimum;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">minimum = <span class="number">27</span>;</span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">minimum = <span class="number">18</span>;</span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>改为纯函数, 将 <code>minimum</code> 变量作为内部变量或函数参数, 避免了外部变量的影响.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> checkAge = <span class="function">(<span class="params">age</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> minimum = <span class="number">21</span>;</span><br><span class="line">  <span class="keyword">return</span> age &gt;= minimum;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">minimum = <span class="number">27</span>;</span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">minimum = <span class="number">18</span>;</span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>另一种改法:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> immutableMinimum = <span class="built_in">Object</span>.freeze(&#123;</span><br><span class="line">  value: <span class="number">21</span>,</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> checkAge = <span class="function">(<span class="params">age</span>) =&gt;</span> age &gt; immutableMinimum;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(checkAge(<span class="number">24</span>)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>利用 es6+ 的语法, 我们可以更轻松的实现纯函数, 例如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line"><span class="keyword">const</span> f = <span class="function">(<span class="params">a, el</span>) =&gt;</span> [...a, el];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result = f(a, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 无论打印多少次, 输出的结果只取决于输入结果, 是纯函数:</span></span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// [1,2,3]</span></span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// [1,2,3]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>纯函数具有执行不依赖外部变量, 可缓存 (Cacheable), 可移植性／自文档化（Portable / Self-Documenting）, 可测试性（Testable）, 合理性（Reasonable）, 代码可并行不会进入竞争态 等特点.</p>
+<h3 id="函数执行不依赖外部变量"><a href="#函数执行不依赖外部变量" class="headerlink" title="函数执行不依赖外部变量"></a>函数执行不依赖外部变量</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不纯的</span></span><br><span class="line"><span class="keyword">var</span> minimum = <span class="number">21</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> checkAge = <span class="function"><span class="keyword">function</span> (<span class="params">age</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> age &gt;= minimum;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不纯的</span></span><br><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line"><span class="keyword">const</span> pushElementImpure = <span class="function">(<span class="params">arr, ele</span>) =&gt;</span> &#123;</span><br><span class="line">  arr.push(ele);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 变成纯函数:</span></span><br><span class="line"><span class="keyword">const</span> pushElementPure = <span class="function">(<span class="params">arr, ele</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> [...arr, ele];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 纯函数无论调用多少次, 都不会改变原数组, 而且该函数的变化不会受外部变量的影响</span></span><br><span class="line">pushElementPure(<span class="number">3</span>);</span><br><span class="line">pushElementPure(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">console</span>.log(arr); <span class="comment">// [1,2]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="可缓存性"><a href="#可缓存性" class="headerlink" title="可缓存性"></a>可缓存性</h3><p>可缓存特性的示例代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用于缓存:</span></span><br><span class="line"><span class="keyword">const</span> memoize = <span class="function">(<span class="params">fn</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> cache = &#123;&#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> key = <span class="built_in">JSON</span>.stringify(args);</span><br><span class="line">    <span class="keyword">if</span> (!cache[key]) &#123;</span><br><span class="line">      cache[key] = fn(...args);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cache[key];</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> square = <span class="function">(<span class="params">x</span>) =&gt;</span> x * x;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sum = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sumOfSquares = <span class="function">(<span class="params">arr</span>) =&gt;</span> arr.map(square).reduce(sum, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> memoizedSumOfSquares = memoize(sumOfSquares);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(memoizedSumOfSquares(numbers)); <span class="comment">// 55 第一次计算</span></span><br><span class="line"><span class="built_in">console</span>.log(memoizedSumOfSquares(numbers)); <span class="comment">// 55 第二次使用缓存，提升性能</span></span><br></pre></td></tr></table></figure>
+
+<p>作者在书中将函数变为纯函数的例子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不纯的</span></span><br><span class="line"><span class="keyword">var</span> signUp = <span class="function"><span class="keyword">function</span>(<span class="params">attrs</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> user = saveUser(attrs);</span><br><span class="line">  welcomeUser(user);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> saveUser = <span class="function"><span class="keyword">function</span>(<span class="params">attrs</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> user = Db.save(attrs);</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> welcomeUser = <span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">    Email(user, ...);</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 纯的</span></span><br><span class="line"><span class="keyword">var</span> signUp = <span class="function"><span class="keyword">function</span>(<span class="params">Db, Email, attrs</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> user = saveUser(Db, attrs);</span><br><span class="line">    welcomeUser(Email, user);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> saveUser = <span class="function"><span class="keyword">function</span>(<span class="params">Db, attrs</span>) </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> welcomeUser = <span class="function"><span class="keyword">function</span>(<span class="params">Email, user</span>) </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可缓存并不需一定写类似上面 的 <code>momerize</code> 函数, 可以直接返回一个不传入任何参数的函数, 使得函数变纯:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// impure</span></span><br><span class="line"><span class="keyword">const</span> signUpImpure = <span class="function">(<span class="params">Db, Email, attrs</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> user = saveUser(Db, attrs);</span><br><span class="line">  welcomeUser(Email);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// pure</span></span><br><span class="line"><span class="keyword">const</span> signUp = <span class="function">(<span class="params">Db, Email, attrs</span>) =&gt;</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> user = saveUser(Db, attrs);</span><br><span class="line">  welcomeUser(Email);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>相应的, 他们在调用时就产生区别:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// impure 调用: 立即执行:</span></span><br><span class="line"><span class="keyword">const</span> signUpUserImpure = signUp(database, emailService, userAttrs);</span><br><span class="line"><span class="comment">// signUpUserImpure 直接在下一步使用</span></span><br><span class="line">signUpUserImpure;</span><br><span class="line"></span><br><span class="line"><span class="comment">// prue 调用: 多一次执行, 即延迟执行:</span></span><br><span class="line"><span class="keyword">const</span> signUpUserPure = signUp(database, emailService, userAttrs);</span><br><span class="line">signUpUserPure();</span><br></pre></td></tr></table></figure>
+
+<h3 id="可移植性／自文档化（Portable-Self-Documenting）"><a href="#可移植性／自文档化（Portable-Self-Documenting）" class="headerlink" title="可移植性／自文档化（Portable / Self-Documenting）"></a>可移植性／自文档化（Portable / Self-Documenting）</h3><p>书里作者引用了这样一段话:</p>
+<blockquote>
+<p>你上一次把某个类方法拷贝到新的应用中是什么时候？我最喜欢的名言之一是 Erlang 语言的作者 Joe Armstrong 说的这句话：“面向对象语言的问题是，它们永远都要随身携带那些隐式的环境。你只需要一个香蕉，但却得到一个拿着香蕉的大猩猩…以及整个丛林”。</p>
+</blockquote>
+<p>下面是我自己给的例子阐述可移植性和自文档性的:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> add = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b;</span><br><span class="line"><span class="keyword">const</span> multiply = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a * b;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> operate = <span class="function">(<span class="params">operator, args</span>) =&gt;</span> args.reduce(operator);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> numbers = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sumResult = operate(add, numbers);</span><br><span class="line"><span class="built_in">console</span>.log(sumResult); <span class="comment">// 输出：9</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> productResult = operate(multiply, numbers);</span><br><span class="line"><span class="built_in">console</span>.log(productResult);</span><br></pre></td></tr></table></figure>
+
+<p><code>operate</code> 函数的参数是 <code>add</code>, <code>multiply</code>, 中的任意一个, 所以 <code>operate</code> 函数是可移植的, 也是可自文档化的.</p>
+<h3 id="合理性利于重构"><a href="#合理性利于重构" class="headerlink" title="合理性利于重构"></a>合理性利于重构</h3><p>看下面一段代码: <code>npm i immutable</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; <span class="built_in">Map</span> &#125; = <span class="built_in">require</span>(<span class="string">&quot;immutable&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Aliases: p = player, a = attacker, t = target</span></span><br><span class="line"><span class="keyword">const</span> jobe = <span class="built_in">Map</span>(&#123; <span class="attr">name</span>: <span class="string">&quot;Jobe&quot;</span>, <span class="attr">hp</span>: <span class="number">20</span>, <span class="attr">team</span>: <span class="string">&quot;red&quot;</span> &#125;);</span><br><span class="line"><span class="keyword">const</span> michael = <span class="built_in">Map</span>(&#123; <span class="attr">name</span>: <span class="string">&quot;Michael&quot;</span>, <span class="attr">hp</span>: <span class="number">20</span>, <span class="attr">team</span>: <span class="string">&quot;green&quot;</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> decrementHP = <span class="function">(<span class="params">p</span>) =&gt;</span> p.set(<span class="string">&quot;hp&quot;</span>, p.get(<span class="string">&quot;hp&quot;</span>) - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isSameTeam = <span class="function">(<span class="params">p1, p2</span>) =&gt;</span> p1.get(<span class="string">&quot;team&quot;</span>) === p2.get(<span class="string">&quot;team&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> punch = <span class="function">(<span class="params">a, t</span>) =&gt;</span> (isSameTeam(a, t) ? t : decrementHP(t));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(punch(jobe, michael).toJS()); <span class="comment">// 将 Map 转换为普通的 JS 对象进行输出</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的 <code>punch</code> 函数, 可以进行下面的简化, 因为判断两者队伍相同的操作<code>p1.get(&quot;team&quot;) === p2.get(&quot;team&quot;)</code>, 实质上是判断 <code>&#39;red&#39;===&#39;green&#39;</code>, 而我们知道, 这两个字符串是永远不可能相等的, 所以我们可以将 <code>isSameTeam(a, t)</code> 函数的判断在<code>punch</code>函数里去掉, 直接返回 <code>decrementHP(t)</code>:</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- const punch = (a, t) =&gt; (isSameTeam(a, t) ? t : decrementHP(t));</span></span><br><span class="line"><span class="addition">+ const punch = (a, t) =&gt; decrementHP(t);</span></span><br></pre></td></tr></table></figure>
+
+<p>接着, <code>decrementHP(t)</code> 继续简化:</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">- const punch = (a, t) =&gt; decrementHP(t)</span></span><br><span class="line"><span class="addition">+ const punch = (t) =&gt; t.set(&quot;hp&quot;, t.get(&quot;hp&quot;) - 1)</span></span><br></pre></td></tr></table></figure>
+
+<p>最终代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; <span class="built_in">Map</span> &#125; = <span class="built_in">require</span>(<span class="string">&quot;immutable&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Aliases: p = player, a = attacker, t = target</span></span><br><span class="line"><span class="keyword">const</span> jobe = <span class="built_in">Map</span>(&#123; <span class="attr">name</span>: <span class="string">&quot;Jobe&quot;</span>, <span class="attr">hp</span>: <span class="number">20</span>, <span class="attr">team</span>: <span class="string">&quot;red&quot;</span> &#125;);</span><br><span class="line"><span class="keyword">const</span> michael = <span class="built_in">Map</span>(&#123; <span class="attr">name</span>: <span class="string">&quot;Michael&quot;</span>, <span class="attr">hp</span>: <span class="number">20</span>, <span class="attr">team</span>: <span class="string">&quot;green&quot;</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> punch = <span class="function">(<span class="params">t</span>) =&gt;</span> t.set(<span class="string">&quot;hp&quot;</span>, t.get(<span class="string">&quot;hp&quot;</span>) - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(punch(jobe, michael).toJS()); <span class="comment">// &#123; name: &#x27;Michael&#x27;, hp: 19, team: &#x27;green&#x27; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="柯里化-Curry-重点"><a href="#柯里化-Curry-重点" class="headerlink" title="柯里化 Curry (重点)"></a>柯里化 Curry (重点)</h2><blockquote>
+<p>curry 的概念很简单：只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。(partial application)</p>
+</blockquote>
+<p>这是我看过最简洁, 且最确切的对柯里化的解释. 很多时候一些编程的理念没有在项目中得到实现, 往往是对其发明的目的还不够明确. 如果目的明确了, 我们大可以在项目中去重构我们的代码. 下面是柯里化在 📖 中作者举的一个最简单例子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义的部分, increment 函数并传入第一个参数</span></span><br><span class="line"><span class="keyword">var</span> increment = add(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">var</span> addTen = add(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 再根据自己的需要, 调用函数并传入自己需要的参数</span></span><br><span class="line">increment(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">addTen(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 12</span></span><br></pre></td></tr></table></figure>
+
+<p>再看下面的代码, 未使用柯里化的普通请求:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 未使用柯里化</span></span><br><span class="line"><span class="keyword">const</span> sendRequest = <span class="function">(<span class="params">method, url, data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> fetch(url, &#123;</span><br><span class="line">    method: method,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    body: <span class="built_in">JSON</span>.stringify(data),</span><br><span class="line">  &#125;).then(<span class="function">(<span class="params">response</span>) =&gt;</span> response.json());</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用原始函数</span></span><br><span class="line">sendRequest(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;https://jsonplaceholder.typicode.com/todos&quot;</span>, &#123;</span><br><span class="line">  key: <span class="string">&quot;value&quot;</span>,</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">response</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;unused curry:&quot;</span>, response));</span><br></pre></td></tr></table></figure>
+
+<p>将上面的代码改造后, 我们可以看到, 函数 <code>currySendRequest</code>, 创建专门的请求函数 <code>postToApi</code> 和 <code>getFromApi</code>, 如果他们放在同一个文件里再导出<code>postToApi</code> 和 <code>getFromApi</code>, 那么调用的时候, 我们只需传入 post 的参数即可, 减少重复代码.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用柯里化</span></span><br><span class="line"><span class="keyword">const</span> currySendRequest = <span class="function">(<span class="params">method</span>) =&gt;</span> <span class="function">(<span class="params">url</span>) =&gt;</span> <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> fetch(url, &#123;</span><br><span class="line">    method: method,</span><br><span class="line">    headers: &#123;</span><br><span class="line">      <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    body: <span class="built_in">JSON</span>.stringify(data),</span><br><span class="line">  &#125;).then(<span class="function">(<span class="params">response</span>) =&gt;</span> response.json());</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建专门的请求函数</span></span><br><span class="line"><span class="keyword">const</span> postRequest = currySendRequest(<span class="string">&quot;POST&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> getRequest = currySendRequest(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> postToApi = postRequest(<span class="string">&quot;https://jsonplaceholder.typicode.com/posts&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> getFromApi = getRequest(<span class="string">&quot;https://jsonplaceholder.typicode.com/todos/12&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用的地方, 无需再关心 method, api等参数</span></span><br><span class="line">postToApi(&#123; <span class="attr">key</span>: <span class="string">&quot;value&quot;</span> &#125;).then(<span class="function">(<span class="params">response</span>) =&gt;</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;POST Response:&quot;</span>, response)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">getFromApi().then(<span class="function">(<span class="params">response</span>) =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&quot;GET Response:&quot;</span>, response));</span><br></pre></td></tr></table></figure>
+
+<p>柯里化的方法特别适用于需要重复调用同一函数但使用不同参数的情况, 参数可以独立进行维护</p>
+<h2 id="组合-Compose-重点"><a href="#组合-Compose-重点" class="headerlink" title="组合 Compose (重点)"></a>组合 Compose (重点)</h2><p>最简单的组合函数, 如下, 作者将其称为函数饲养</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> compose = <span class="function"><span class="keyword">function</span> (<span class="params">f, g</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> f(g(x));</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>当然, 这种嵌套的写法<code>f(g(x))</code>可读性是比较差的, 作者在书中举例了另一种写法, 我愿意称之为管道操作, 但必须安装他的库 <code>npm i @mostly-adequate/support</code> 才能使用以下代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> toUpperCase = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x.toUpperCase();</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> exclaim = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + <span class="string">&quot;!&quot;</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> shout = compose(exclaim, toUpperCase);</span><br><span class="line"></span><br><span class="line">shout(<span class="string">&quot;send in the clowns&quot;</span>);</span><br><span class="line"><span class="comment">//=&gt; &quot;SEND IN THE CLOWNS!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不实用管道则得嵌套: exclaim(toUpperCase(x))</span></span><br><span class="line"><span class="keyword">var</span> shout = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> exclaim(toUpperCase(x));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我这里自己写了一个类似的 compose 管道函数的例子如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> composePipe = <span class="function">(<span class="params">...fns</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> execute = <span class="function">(<span class="params">initialValue</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> fns.reduce(<span class="function">(<span class="params">value, fn</span>) =&gt;</span> fn(value), initialValue);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123; execute &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例函数</span></span><br><span class="line"><span class="keyword">const</span> toUpperCase = <span class="function">(<span class="params">x</span>) =&gt;</span> x.toUpperCase();</span><br><span class="line"><span class="keyword">const</span> exclaim = <span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="string">&quot;!&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> reverse = <span class="function">(<span class="params">x</span>) =&gt;</span> x.split(<span class="string">&quot;&quot;</span>).reverse().join(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建组合函数</span></span><br><span class="line"><span class="keyword">const</span> result = composePipe(toUpperCase, exclaim, reverse).execute(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// 输出: !OLLEH</span></span><br></pre></td></tr></table></figure>
+
+<p>当然上面的 <code>composePipe</code> 函数还可以简化为柯里化的形式:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> composePipeCurry =</span><br><span class="line">  (...fns) =&gt;</span><br><span class="line">  (initialValue) =&gt;</span><br><span class="line">    fns.reduce(<span class="function">(<span class="params">value, fn</span>) =&gt;</span> fn(value), initialValue);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例函数</span></span><br><span class="line"><span class="keyword">const</span> toUpperCase = <span class="function">(<span class="params">x</span>) =&gt;</span> x.toUpperCase();</span><br><span class="line"><span class="keyword">const</span> exclaim = <span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="string">&quot;!&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> reverse = <span class="function">(<span class="params">x</span>) =&gt;</span> x.split(<span class="string">&quot;&quot;</span>).reverse().join(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// (&quot;hello&quot;) 相当于 composePipeCurry 函数里 (initialValue)</span></span><br><span class="line"><span class="keyword">const</span> result = composePipeCurry(toUpperCase, exclaim, reverse)(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// 输出: !OLLEH</span></span><br></pre></td></tr></table></figure>
+
+<p>其实, 我还是喜欢第一种 <code>composePipe</code> 的写法, 柯里化虽然简洁了些, 但可读性反而变差了</p>
+<h3 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h3><blockquote>
+<p>结合律的一大好处是任何一个函数分组都可以被拆开来，然后再以它们自己的组合方式打包在一起。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> loudLastUpper = compose(exclaim, toUpperCase, head, reverse);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"><span class="keyword">var</span> last = compose(head, reverse);</span><br><span class="line"><span class="keyword">var</span> loudLastUpper = compose(exclaim, toUpperCase, last);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或</span></span><br><span class="line"><span class="keyword">var</span> last = compose(head, reverse);</span><br><span class="line"><span class="keyword">var</span> angry = compose(exclaim, toUpperCase);</span><br><span class="line"><span class="keyword">var</span> loudLastUpper = compose(angry, last);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更多变种...</span></span><br></pre></td></tr></table></figure>
+
+<p>由于 <code>compose</code> 函数用 <code>reduce</code> 实现, 所以, 传入的函数没有限制, 所以可以任意进行组合或者分组, 这也体现了组合的灵活性.</p>
+<h3 id="pointFree-模式"><a href="#pointFree-模式" class="headerlink" title="pointFree 模式"></a><code>pointFree</code> 模式</h3><blockquote>
+<p>pointfree 模式指的是，永远不必说出你的数据。</p>
+</blockquote>
+<p>以下是书中的例子</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 非 pointfree，因为提到了数据：word</span></span><br><span class="line"><span class="keyword">var</span> snakeCase = <span class="function"><span class="keyword">function</span> (<span class="params">word</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> word.toLowerCase().replace(<span class="regexp">/\s+/gi</span>, <span class="string">&quot;_&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// pointfree</span></span><br><span class="line"><span class="keyword">var</span> snakeCase = compose(replace(<span class="regexp">/\s+/gi</span>, <span class="string">&quot;_&quot;</span>), toLowerCase);</span><br></pre></td></tr></table></figure>
+
+<p>以下是我对 <code>point free</code> 模式的理解写的 demo:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> people = [</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&quot;Alice&quot;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&quot;Bob&quot;</span>, <span class="attr">age</span>: <span class="number">30</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&quot;Charlie&quot;</span>, <span class="attr">age</span>: <span class="number">35</span> &#125;,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统方法, 必须有 person 参数才能参与</span></span><br><span class="line"><span class="keyword">const</span> processPerson = <span class="function">(<span class="params">person</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> upperCaseName = person.name.toUpperCase();</span><br><span class="line">  <span class="keyword">const</span> incrementedAge = person.age + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> greeting = <span class="string">`Hello, <span class="subst">$&#123;upperCaseName&#125;</span>!`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    name: upperCaseName,</span><br><span class="line">    age: incrementedAge,</span><br><span class="line">    greeting: greeting,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统模式: 假如上面的代码放在另一个文件, 我们要查清楚 processPerson 里面的操作,</span></span><br><span class="line"><span class="comment">// 还必须跑去 processPerson 函数里阅读代码及 debug</span></span><br><span class="line"><span class="keyword">const</span> processedPeople = people.map(processPerson);</span><br><span class="line"><span class="built_in">console</span>.log(processedPeople);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以下为改用组合模式 compose</span></span><br><span class="line"><span class="keyword">const</span> compose = <span class="function">(<span class="params">...fns</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> execute = <span class="function">(<span class="params">initialArray</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> initialArray.map(<span class="function">(<span class="params">item</span>) =&gt;</span></span><br><span class="line">      fns.reduce(<span class="function">(<span class="params">value, fn</span>) =&gt;</span> fn(value), item)</span><br><span class="line">    );</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; execute &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> toUpperCase = <span class="function">(<span class="params">str</span>) =&gt;</span> str.toUpperCase();</span><br><span class="line"><span class="keyword">const</span> increment = <span class="function">(<span class="params">n</span>) =&gt;</span> n + <span class="number">1</span>;</span><br><span class="line"><span class="keyword">const</span> createGreeting = <span class="function">(<span class="params">name</span>) =&gt;</span> <span class="string">`Hello, <span class="subst">$&#123;name&#125;</span>!`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Pointfree functions</span></span><br><span class="line"><span class="keyword">const</span> toUpperCaseName = <span class="function">(<span class="params">obj</span>) =&gt;</span> (&#123; ...obj, <span class="attr">name</span>: toUpperCase(obj.name) &#125;);</span><br><span class="line"><span class="keyword">const</span> incrementAge = <span class="function">(<span class="params">obj</span>) =&gt;</span> (&#123; ...obj, <span class="attr">age</span>: increment(obj.age) &#125;);</span><br><span class="line"><span class="keyword">const</span> addGreeting = <span class="function">(<span class="params">obj</span>) =&gt;</span> (&#123; ...obj, <span class="attr">greeting</span>: createGreeting(obj.name) &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// compose 方法, 可以根据函数名字, 清晰的知道做了哪些操作</span></span><br><span class="line"><span class="keyword">const</span> composedPeople = compose(</span><br><span class="line">  toUpperCaseName,</span><br><span class="line">  incrementAge,</span><br><span class="line">  addGreeting</span><br><span class="line">).execute(people);</span><br><span class="line"><span class="built_in">console</span>.log(composedPeople);</span><br></pre></td></tr></table></figure>
+
+<h3 id="debug-compose-函数的方法"><a href="#debug-compose-函数的方法" class="headerlink" title="debug compose 函数的方法"></a>debug compose 函数的方法</h3><p>当我们在 debug compose 函数时，我们可以使用 一个 <code>trace</code> 来追踪错误, 以下是我自己写的 <code>trace</code> 函数, 没有用书中的例子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> debug = <span class="function">(<span class="params">label</span>) =&gt;</span> <span class="function">(<span class="params">value</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;label&#125;</span>:`</span>, value);</span><br><span class="line">  <span class="keyword">return</span> value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>label</code> 指的是我们自己写的标志, <code>value</code>就是每一步所产生的值, 这个函数可以插在 compose 函数中的每一步, 我们用上面 <code>composedPeople</code> 的代码举例, 如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> composedPeople = compose(</span><br><span class="line">  toUpperCaseName,</span><br><span class="line">  debug(<span class="string">&quot;After toUpperCaseName&quot;</span>),</span><br><span class="line">  incrementAge,</span><br><span class="line">  debug(<span class="string">&quot;After incrementAge&quot;</span>),</span><br><span class="line">  addGreeting,</span><br><span class="line">  debug(<span class="string">&quot;After addGreeting&quot;</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="范畴学-category-theory"><a href="#范畴学-category-theory" class="headerlink" title="范畴学 (category theory)"></a>范畴学 (category theory)</h3><p>组合背后的强大理论基础. 在编程中体现为处理:</p>
+<blockquote>
+<p>对象 Object<br>态射 morphism<br>变化式 transformation</p>
+</blockquote>
+<p>在编程里, 范畴学的应用体现在:</p>
+<ul>
+<li>对象的集合<ul>
+<li>例如 <code>Boolean</code> 就是 <code>[true, false]</code>的集合, <code>Number</code>就是所有实数的集合</li>
+<li>可以用集合论(set theory)来处理类型</li>
+</ul>
+</li>
+<li>态射的集合, 即标准的纯函数</li>
+<li>态射的组合<ul>
+<li>结合律是在范畴学中对任何组合都适用的一个特性</li>
+</ul>
+</li>
+<li>一种特殊态射 identity <code>const id = x =&gt; x</code></li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><blockquote>
+<p>组合像一系列管道那样把不同的函数联系在一起，数据在其中流动</p>
+</blockquote>
+<blockquote>
+<p>组合是高于其他所有原则的设计原则</p>
+</blockquote>
+<blockquote>
+<p>范畴学将用在指导应用架构、副作用建模和保证正确性</p>
+</blockquote>
+<h2 id="type-signature-类型签名"><a href="#type-signature-类型签名" class="headerlink" title="type signature 类型签名"></a>type signature 类型签名</h2><blockquote>
+<p>类型（type）是让所有不同背景的人都能高效沟通的元语言。</p>
+</blockquote>
+<p>实质上, 我感觉就是 type script 的一种子类型. 比 type script 简单, type script 我们在项目中已经用的不少了, 这里不过多解释, 下面只给出一些书中的示例:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  capitalize :: String -&gt; String</span></span><br><span class="line"><span class="keyword">var</span> capitalize = <span class="function"><span class="keyword">function</span> (<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> toUpperCase(head(s)) + toLowerCase(tail(s));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">capitalize(<span class="string">&quot;smurf&quot;</span>);</span><br><span class="line"><span class="comment">//=&gt; &quot;Smurf&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  strLength :: String -&gt; Number</span></span><br><span class="line"><span class="keyword">var</span> strLength = <span class="function"><span class="keyword">function</span> (<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> s.length;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// [] 是指数组, 类似 ts 的 string[]</span></span><br><span class="line"><span class="comment">//  join :: String -&gt; [String] -&gt; String</span></span><br><span class="line"><span class="keyword">var</span> join = curry(<span class="function"><span class="keyword">function</span> (<span class="params">what, xs</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> xs.join(what);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//  match :: Regex -&gt; (String -&gt; [String])</span></span><br><span class="line"><span class="keyword">var</span> match = curry(<span class="function"><span class="keyword">function</span> (<span class="params">reg, s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> s.match(reg);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//  replace :: Regex -&gt; (String -&gt; (String -&gt; String))</span></span><br><span class="line"><span class="keyword">var</span> replace = curry(<span class="function"><span class="keyword">function</span> (<span class="params">reg, sub, s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> s.replace(reg, sub);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>相同的变量名，其类型也一定相同</p>
+</blockquote>
+<p>类似 ts 的泛型:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// id :: a -&gt; a</span></span><br><span class="line"><span class="keyword">const</span> id = <span class="function">(<span class="params">x</span>) =&gt;</span> x;</span><br><span class="line"></span><br><span class="line"><span class="comment">// map：： （a -&gt; b） -&gt; ［a] -&gt; ［b］</span></span><br><span class="line"><span class="keyword">const</span> map = curry(<span class="function">(<span class="params">f, xs</span>) =&gt;</span> xs.map(f));</span><br></pre></td></tr></table></figure>
+
+<p>接口在类型签名中的表示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sort :: Ord a =&gt; [a] -&gt; [a]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// assertEqual :: (Eq a, Show a) =&gt; a -&gt; a -&gt; Assertion</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>Ord</code>, <code>Eq</code> , <code>Show</code> 均为接口, 接口的实现实现用 <code>=&gt;</code> 表示</p>
+<h2 id="Functor-函子-重点"><a href="#Functor-函子-重点" class="headerlink" title="Functor 函子 (重点)"></a><code>Functor</code> 函子 (重点)</h2><blockquote>
+<p><code>Functor</code> 是实现了 <code>map</code> 函数并遵守一些特定规则的容器类型。</p>
+</blockquote>
+<p>本文花费了大量时间于 <code>Functor</code> 这章的内容, 因为 Functor 里的 <code>Maybe</code>, <code>Either</code> 等概念在 js 里没有原生支持, 而反观纯函数式语言的 <code>Haskell</code>, <code>Scala</code>, <code>F#</code> 等语言都有.</p>
+<p>下面是提问 Chatgpt 后的回答:</p>
+<blockquote>
+<p><code>Functor</code> 是一个具有 <code>map</code> 方法的容器或上下文，该方法允许你将一个函数应用到容器内的每个值，并返回一个新的容器。</p>
+</blockquote>
+<p>总结起来, <strong>Functor 就是允许使用 map 函数变换里面内容的容器</strong>. 在函数式编程中, 我们已经使用很久了, 但可能你并没意识到你在使用它. 例如, 在 JavaScript 中, <code>Array</code> 和 <code>String</code> 都是 functor, 因为它们都实现了 <code>map</code> 方法.</p>
+<h3 id="Functor-的特性解析"><a href="#Functor-的特性解析" class="headerlink" title="Functor 的特性解析"></a><code>Functor</code> 的特性解析</h3><p>以下是一个函子 <code>Functor</code> 的最简单实现, 符合了 <code>Functor</code> 的定义:</p>
+<ul>
+<li><code>map</code> 方法接收一个函数, 并返回一个函子.</li>
+<li>外部传进来的值, 利用私有变量 <code>#value</code> 保存起来</li>
+<li>所有的操作都是基于私有变量 <code>#value</code> , 他始终保存在容器内.</li>
+</ul>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Container</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  #value: T;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value: T</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.#value = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): Container&lt;U&gt; &#123;</span><br><span class="line">    <span class="comment">// map递归创建一个新的 Container, 更新私有变量 #value:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Container(fn(<span class="built_in">this</span>.#value));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title">value</span>(): <span class="title">T</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.#value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> c = <span class="keyword">new</span> Container(<span class="number">2</span>).map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">3</span>).map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x);</span><br><span class="line"><span class="built_in">console</span>.log(c.value); <span class="comment">// 25</span></span><br></pre></td></tr></table></figure>
+
+<p>接着, 我们一步步来完善上面的实现</p>
+<h3 id="Pointed-Functor"><a href="#Pointed-Functor" class="headerlink" title="Pointed Functor"></a>Pointed Functor</h3><blockquote>
+<p>实现了静态方法 <code>of</code> 的函子, <code>of</code> 方法是把值放到上下文 <code>Context</code> 中, 使用 <code>map</code> 来处理</p>
+</blockquote>
+<p>我们在调用 <code>Container</code> 时仍需要 <code>new</code> 关键字, 这很不符合函数式编程的逻辑, 所以我们可以考虑将 <code>new</code> 关键字去掉, 优化 <code>Functor</code> 类, 添加静态方法 <code>of</code> 替代, 如:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Container</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  #value: T;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value: T</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.#value = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 静态方法 of 替换调用时的 new 关键字</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">of</span>&lt;T&gt;(value: T): Container&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Container(value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): Container&lt;U&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Container.of(fn(<span class="built_in">this</span>.#value));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title">value</span>(): <span class="title">T</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.#value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> c = Container.of(<span class="number">3</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(c.value); <span class="comment">// 输出: 16</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="extract-函数获取值"><a href="#extract-函数获取值" class="headerlink" title="extract 函数获取值"></a><code>extract</code> 函数获取值</h3><p>由于 <code>Functor</code> 最终的产物始终是一个容器, 上面的代码中, 还是利用面向对象的思维, 用 getter 方法, 获取容器内的值. 实际上, 严格意义上函数式编程仍是用函数的方式来获取容器内的值. 如下:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Container</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  #value: T;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value: T</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.#value = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">of</span>&lt;T&gt;(value: T): Container&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Container(value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): Container&lt;U&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> Container.of(fn(<span class="built_in">this</span>.#value));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// extract 方法，用于最终处理和提取值</span></span><br><span class="line">  extract&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): U &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(<span class="built_in">this</span>.#value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> c = Container.of(<span class="number">3</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x)</span><br><span class="line">  .extract(<span class="function">(<span class="params">x</span>) =&gt;</span> x);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(c); <span class="comment">// 输出: 16</span></span><br></pre></td></tr></table></figure>
+
+<p>将其改为函数的形式:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Container = &lt;T&gt;<span class="function">(<span class="params">value: T</span>) =&gt;</span> (&#123;</span><br><span class="line">  map: &lt;U&gt;<span class="function">(<span class="params">fn: (value: T) =&gt; U</span>) =&gt;</span> Container(fn(value)),</span><br><span class="line">  extract: &lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): <span class="function"><span class="params">U</span> =&gt;</span> fn(value),</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> c = Container(<span class="number">3</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * x)</span><br><span class="line">  .extract(<span class="function">(<span class="params">x</span>) =&gt;</span> x);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(c); <span class="comment">// 输出: 16</span></span><br></pre></td></tr></table></figure>
+
+<p><code>Functor</code> 除了上面所提及的基础内容, 在实际开发中, 还有一个大功能, 是用来解决纯函数编程的副作用问题. 把副作用控制在我们可控的范围内. 这些副作用包括</p>
+<ul>
+<li>处理异常</li>
+<li>异步操作</li>
+<li>I/O 操作</li>
+</ul>
+<p>下面, 我们就 <code>Functor</code> 的副作用特征, 来展开讨论.</p>
+<h3 id="Maybe-Functor"><a href="#Maybe-Functor" class="headerlink" title="Maybe Functor"></a>Maybe Functor</h3><p><code>Maybe</code> 是用于处理判断传入的值是否为 <code>null</code> 和 <code>undefined</code> 的 <code>Functor</code>. <strong>在 <code>Scala</code> 中, 相当于 <code>Option</code></strong></p>
+<p>而如果在 JS 里运用上 <code>Maybe</code> 的类型检查, 那么可以避免很多的 <code>if</code> 判断. 他原生的捕获了 <code>null</code> 和 <code>undefined</code> 的问题, 并且提供了 <code>map</code> 方法, 使得我们可以在 <code>Maybe</code> 类型中应用 <code>map</code> 方法. 使得程序不会因为 <code>null</code> 和<code>undefined</code> 值报错从而使程序报错或中断.</p>
+<p>我们自己来实现一个 <code>Maybe</code> 类型:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Maybe</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  #value: T;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.#value = value;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">of</span>&lt;T&gt;(value: T): Maybe&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Maybe(value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U | <span class="literal">null</span>): Maybe&lt;U | <span class="literal">null</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.isNone() ? Maybe.of(<span class="literal">null</span>) : Maybe.of(fn(<span class="built_in">this</span>.#value));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  extract&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): U &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(<span class="built_in">this</span>.#value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  isNone(): <span class="built_in">boolean</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.#value === <span class="literal">null</span> || <span class="built_in">this</span>.#value === <span class="literal">undefined</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用示例:</span></span><br><span class="line"><span class="keyword">const</span> m = Maybe.of&lt;<span class="built_in">string</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x?.toUpperCase())</span><br><span class="line">  .extract(<span class="function">(<span class="params">x</span>) =&gt;</span> x);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(m);</span><br></pre></td></tr></table></figure>
+
+<p>将上面的 <code>Maybe</code> class 类型改为函数式:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Maybe = &lt;T&gt;<span class="function">(<span class="params">value: T</span>) =&gt;</span> (&#123;</span><br><span class="line">  map: &lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U | <span class="literal">null</span>): ReturnType&lt;<span class="keyword">typeof</span> Maybe&lt;U | <span class="literal">null</span>&gt;&gt; =&gt;</span><br><span class="line">    Maybe(fn(value)),</span><br><span class="line">  extract: &lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): <span class="function"><span class="params">U</span> =&gt;</span> fn(value),</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> m = Maybe&lt;<span class="built_in">string</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x?.toUpperCase() || <span class="literal">null</span>)</span><br><span class="line">  .extract(<span class="function">(<span class="params">x</span>) =&gt;</span> x);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(m); <span class="comment">// null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m1 = Maybe(<span class="string">&quot;hello world&quot;</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x.toUpperCase())</span><br><span class="line">  .extract(<span class="function">(<span class="params">x</span>) =&gt;</span> x);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(m1); <span class="comment">// &#x27;HELLO WORLD&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>稍微解释一下上面的代码:</p>
+<ul>
+<li>上面的代码改为函数式后, 更为精简, 连 class 里的 <code>isNone</code> 方法, 都不需要了</li>
+<li>泛型 <code>&lt;U&gt;</code> 代表函数的返回值类型, 如果一个泛型, 他的返回值类型和他传入的类型不一样, 那么就必须在函数的括号前, 加上一个新的泛型, 作为返回值, 如上面所示</li>
+</ul>
+<h3 id="Either-Functor"><a href="#Either-Functor" class="headerlink" title="Either Functor"></a>Either Functor</h3><p>上面<code>Maybe Functor</code> 的实现, 解决了传入的参数为空值的需求. 但如果在链式调用的过程中, 某一次出现空值的情况, 那么对于调试或者编码来说, 是难以预测的, 比如:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> m1 = Maybe(<span class="string">&quot;hello world&quot;</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x.toUpperCase())</span><br><span class="line">  <span class="comment">// 假设某一次调用出现了空值:</span></span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> <span class="literal">undefined</span>)</span><br><span class="line">  .extract(<span class="function">(<span class="params">x</span>) =&gt;</span> x);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出的结果虽然捕获到, 但是这并不是我们想要的结果:</span></span><br><span class="line"><span class="built_in">console</span>.log(m1); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<p>这时, <code>Either</code> 就派上用场了.</p>
+<blockquote>
+<p><code>Either</code> 是一个用于处理调用过程中错误和异常的 <code>Functor</code>.</p>
+</blockquote>
+<blockquote>
+<p><code>Either</code>是一个表示可能含有两种类型值的数据结构，它通常用于表示一个计算的结果可能成功（含有一个值）或失败（含有一个错误或另一种值）。</p>
+</blockquote>
+<blockquote>
+<p><code>Either</code> 有两个子构造：<code>Left</code> 和 <code>Right</code>。按照惯例，<code>Right</code> 通常表示成功，而 <code>Left</code> 通常表示失败或错误。<code>Either</code> 是这两种构造的叠加态.</p>
+</blockquote>
+<p>以下是 <code>Scala</code> 关于 <code>Either</code> 的一个简单例子, 可以说明 <code>Either</code> 的作用:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">divide</span></span>(a: <span class="type">Int</span>, b: <span class="type">Int</span>): <span class="type">Either</span>[<span class="type">String</span>, <span class="type">Double</span>] = &#123;</span><br><span class="line">  <span class="comment">// 当除数为0时，返回错误信息Left</span></span><br><span class="line">  <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="type">Left</span>(<span class="string">&quot;Division by zero&quot;</span>)</span><br><span class="line">  <span class="comment">// 当除数不为0时，返回结果Right</span></span><br><span class="line">  <span class="keyword">else</span> <span class="type">Right</span>(a.toDouble / b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样的, 我们用 ts 来简单的实现 <code>Either</code>:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Either</span>&lt;<span class="title">L</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> left&lt;L, R&gt;(value: L): Either&lt;L, R&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Left(value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> right&lt;L, R&gt;(value: R): Either&lt;L, R&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Right(value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: R</span>) =&gt;</span> U): Either&lt;L, U&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.isRight()</span><br><span class="line">      ? Either.right(fn(<span class="built_in">this</span>.getValue()))</span><br><span class="line">      : Either.left(<span class="built_in">this</span>.getError());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  flatMap&lt;U&gt;(fn: <span class="function">(<span class="params">value: R</span>) =&gt;</span> Either&lt;L, U&gt;): Either&lt;L, U&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.isRight() ? fn(<span class="built_in">this</span>.getValue()) : Either.left(<span class="built_in">this</span>.getError());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getOrElse(defaultValue: R): R &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.isRight() ? <span class="built_in">this</span>.getValue() : defaultValue;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  isLeft(): <span class="built_in">this</span> is Left&lt;L&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  isRight(): <span class="built_in">this</span> is Right&lt;R&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getValue(): R &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Cannot get value from Left&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getError(): L &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Cannot get error from Right&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Left</span>&lt;<span class="title">L</span>&gt; <span class="keyword">extends</span> <span class="title">Either</span>&lt;<span class="title">L</span>, <span class="title">never</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> value: L;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value: L</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>();</span><br><span class="line">    <span class="built_in">this</span>.value = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  isLeft(): <span class="built_in">this</span> is Left&lt;L&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getError(): L &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Right</span>&lt;<span class="title">R</span>&gt; <span class="keyword">extends</span> <span class="title">Either</span>&lt;<span class="title">never</span>, <span class="title">R</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> value: R;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value: R</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>();</span><br><span class="line">    <span class="built_in">this</span>.value = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  isRight(): <span class="built_in">this</span> is Right&lt;R&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getValue(): R &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用代码:</span></span><br><span class="line"><span class="keyword">const</span> rightValue: Either&lt;<span class="built_in">string</span>, <span class="built_in">number</span>&gt; = Either.right(<span class="number">5</span>);</span><br><span class="line"><span class="keyword">const</span> leftValue: Either&lt;<span class="built_in">string</span>, <span class="built_in">number</span>&gt; = Either.left(<span class="string">&quot;Error&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result1 = rightValue</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .flatMap(<span class="function">(<span class="params">x</span>) =&gt;</span> Either.right(x * <span class="number">2</span>))</span><br><span class="line">  .getOrElse(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result2 = leftValue</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .flatMap(<span class="function">(<span class="params">x</span>) =&gt;</span> Either.right(x * <span class="number">2</span>))</span><br><span class="line">  .getOrElse(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(result1); <span class="comment">// 输出: 12</span></span><br><span class="line"><span class="built_in">console</span>.log(result2); <span class="comment">// 输出: 0</span></span><br></pre></td></tr></table></figure>
+
+<p>将上面的 <code>Either</code> class 类型改为函数式:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Either&lt;L, R&gt; = &#123; <span class="attr">type</span>: <span class="string">&quot;Left&quot;</span>; value: L &#125; | &#123; <span class="attr">type</span>: <span class="string">&quot;Right&quot;</span>; value: R &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> left = &lt;L, R&gt;(value: L): Either&lt;L, R&gt; =&gt; (&#123; type: &quot;Left&quot;, value &#125;);</span><br><span class="line">const right = &lt;L, R&gt;(value: R): Either&lt;L, R&gt; =&gt; (&#123; type: &quot;Right&quot;, value &#125;);</span><br><span class="line"></span><br><span class="line">const isRight = &lt;L, R&gt;(</span><br><span class="line">  either: Either&lt;L, R&gt;</span><br><span class="line">): either is &#123; type: &quot;Right&quot;; value: R &#125; =&gt; either.type === &quot;Right&quot;;</span><br><span class="line"></span><br><span class="line">const map = &lt;L, R, U&gt;(</span><br><span class="line">  either: Either&lt;L, R&gt;,</span><br><span class="line">  fn: (value: R) =&gt; U</span><br><span class="line">): Either&lt;L, U&gt; =&gt; (isRight(either) ? right(fn(either.value)) : either);</span><br><span class="line"></span><br><span class="line">const flatMap = &lt;L, R, U&gt;(</span><br><span class="line">  either: Either&lt;L, R&gt;,</span><br><span class="line">  fn: (value: R) =&gt; Either&lt;L, U&gt;</span><br><span class="line">): Either&lt;L, U&gt; =&gt; (isRight(either) ? fn(either.value) : either);</span><br><span class="line"></span><br><span class="line">const getOrElse = &lt;L, R&gt;(either: Either&lt;L, R&gt;, defaultValue: R): R =&gt;</span><br><span class="line">  isRight(either) ? either.value : defaultValue;</span><br><span class="line"></span><br><span class="line">// 示例代码:</span><br><span class="line">const rightValue: Either&lt;string, number&gt; = right(5);</span><br><span class="line">const leftValue: Either&lt;string, number&gt; = left(&quot;Error&quot;);</span><br><span class="line"></span><br><span class="line">// Using map and flatMap directly</span><br><span class="line">const ret1 = getOrElse(</span><br><span class="line">  flatMap(</span><br><span class="line">    map(rightValue, (x) =&gt; x + 1),</span><br><span class="line">    (x) =&gt; right(x * 2)</span><br><span class="line">  ),</span><br><span class="line">  0</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const ret2 = getOrElse(</span><br><span class="line">  flatMap(</span><br><span class="line">    map(leftValue, (x) =&gt; x + 1),</span><br><span class="line">    (x) =&gt; right(x * 2)</span><br><span class="line">  ),</span><br><span class="line">  0</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">console.log(ret1); // 输出: 12</span><br><span class="line">console.log(ret2); // 输出: 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="IO-Functor"><a href="#IO-Functor" class="headerlink" title="IO Functor"></a>IO Functor</h3><p>IO Functor 相比于上面提到的 Functor, 有以下特点:</p>
+<ul>
+<li>IO Functor 的私有变量 <code>#value</code> 是一个函数, 把函数当做值来处理.</li>
+<li><code>#value</code> 作为函数存储, 好处是可以缓存, 惰性执行. 调用了才执行</li>
+<li>把不是纯函数的操作交给调用者处理</li>
+</ul>
+<p>下面是一个 <code>IO</code> 的例子</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IO</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  #effect: <span class="function">() =&gt;</span> T;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">effect: () =&gt; T</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> effect !== <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&quot;IO expects a function&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.#effect = effect;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// map method to transform the value inside IO</span></span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): IO&lt;U&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> IO.of(<span class="function">() =&gt;</span> fn(<span class="built_in">this</span>.#effect()));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// run method to execute the effect</span></span><br><span class="line">  run(): T &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.#effect();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// static of method to create an IO instance</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">of</span>&lt;T&gt;(value: T | (<span class="function">() =&gt;</span> T)): IO&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> IO(</span><br><span class="line">      <span class="comment">// 为了兼容普通值, 如果用 of 传入的普通参数, 将其视为一个函数执行</span></span><br><span class="line">      <span class="keyword">typeof</span> value === <span class="string">&quot;function&quot;</span> ? (value <span class="keyword">as</span> () =&gt; T) : <span class="function">() =&gt;</span> value</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个IO实例，将其包装一个副作用函数</span></span><br><span class="line"><span class="keyword">const</span> io = IO.of(<span class="number">5</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行并获取最终的结果</span></span><br><span class="line"><span class="keyword">const</span> result = io.run();</span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// 输出: 12</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个读取用户输入的IO Functor</span></span><br><span class="line"><span class="keyword">const</span> readInput = IO.of(<span class="function">() =&gt;</span> prompt(<span class="string">&quot;Enter a value:&quot;</span>));</span><br><span class="line"><span class="keyword">const</span> p = <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> IO.of(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`You entered: <span class="subst">$&#123;x&#125;</span>`</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = readInput</span><br><span class="line">  .map(<span class="function">(<span class="params">input</span>) =&gt;</span> input?.toUpperCase() || <span class="string">&quot;&quot;</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">input</span>) =&gt;</span> <span class="string">`Hello, <span class="subst">$&#123;input&#125;</span>!`</span>)</span><br><span class="line">  .map(p)</span><br><span class="line">  .map(<span class="function">(<span class="params">io</span>) =&gt;</span> io.run());</span><br><span class="line"></span><br><span class="line">app.run(); <span class="comment">// 将显示一个提示输入框，然后打印用户输入的值</span></span><br></pre></td></tr></table></figure>
+
+<p>将其改为函数式表达, 省略掉静态方法 <code>of</code>:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Effect&lt;T&gt; = <span class="function">() =&gt;</span> T;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> IO&lt;T&gt; &#123;</span><br><span class="line">  map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): IO&lt;U&gt;;</span><br><span class="line">  run(): T;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> IO = &lt;T&gt;(value: T | Effect&lt;T&gt;): IO&lt;T&gt; =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> effect: Effect&lt;T&gt; =</span><br><span class="line">    <span class="keyword">typeof</span> value === <span class="string">&quot;function&quot;</span> ? (value <span class="keyword">as</span> Effect&lt;T&gt;) : <span class="function">() =&gt;</span> value;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    map&lt;U&gt;(fn: <span class="function">(<span class="params">value: T</span>) =&gt;</span> U): IO&lt;U&gt; &#123;</span><br><span class="line">      <span class="keyword">return</span> IO(<span class="function">() =&gt;</span> fn(effect()));</span><br><span class="line">    &#125;,</span><br><span class="line">    run(): T &#123;</span><br><span class="line">      <span class="keyword">return</span> effect();</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个IO实例，将其包装一个副作用函数</span></span><br><span class="line"><span class="keyword">const</span> io = IO(<span class="number">5</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">x</span>) =&gt;</span> x * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行并获取最终的结果</span></span><br><span class="line"><span class="keyword">const</span> result = io.run();</span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">// 输出: 12</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个读取用户输入的IO Functor</span></span><br><span class="line"><span class="keyword">const</span> readInput = IO(<span class="function">() =&gt;</span> prompt(<span class="string">&quot;Enter a value:&quot;</span>));</span><br><span class="line"><span class="keyword">const</span> p = <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> IO(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`You entered: <span class="subst">$&#123;x&#125;</span>`</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = readInput</span><br><span class="line">  .map(<span class="function">(<span class="params">input</span>) =&gt;</span> input?.toUpperCase() || <span class="string">&quot;&quot;</span>)</span><br><span class="line">  .map(<span class="function">(<span class="params">input</span>) =&gt;</span> <span class="string">`Hello, <span class="subst">$&#123;input&#125;</span>!`</span>)</span><br><span class="line">  .map(p)</span><br><span class="line">  .map(<span class="function">(<span class="params">io</span>) =&gt;</span> io.run());</span><br><span class="line"></span><br><span class="line">app.run(); <span class="comment">// 将显示一个提示输入框，然后打印用户输入的值</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Monad-单子-重点"><a href="#Monad-单子-重点" class="headerlink" title="Monad 单子 (重点)"></a>Monad 单子 (重点)</h2><p>(待更新)</p>
+<p>参考资料:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mostly-adequate.gitbook.io/mostly-adequate-guide">https://mostly-adequate.gitbook.io/mostly-adequate-guide</a></li>
+</ul>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/05/26/%E3%80%902024-05-26%E3%80%91Kubernetes%20%E5%9F%BA%E7%A1%80/">Kubernetes 基础</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="xaoxuu/blog-comments" issue-term="pathname" theme="preferred-color-scheme"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">自由の翼</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1">Stellar 1.28.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E4%BD%9C%E4%B8%BA%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91"><span class="toc-text">函数作为一等公民</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%97%A2%E5%8F%AF%E4%BB%A5%E4%BD%9C%E4%B8%BA%E5%8F%82%E6%95%B0-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E4%BD%9C%E4%B8%BA%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-text">函数既可以作为参数, 也可以作为返回值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E7%9A%84%E9%80%9A%E7%94%A8%E6%80%A7-%E4%BD%BF%E5%BE%97%E5%90%8E%E6%9C%9F%E6%98%93%E4%BA%8E%E6%89%A9%E5%B1%95"><span class="toc-text">命名的通用性, 使得后期易于扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS-%E7%9A%84-bug-this"><span class="toc-text">JS 的 bug: this</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%AF%E5%87%BD%E6%95%B0-Pure-Function"><span class="toc-text">纯函数 Pure Function</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81"><span class="toc-text">特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%89%A7%E8%A1%8C%E4%B8%8D%E4%BE%9D%E8%B5%96%E5%A4%96%E9%83%A8%E5%8F%98%E9%87%8F"><span class="toc-text">函数执行不依赖外部变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E7%BC%93%E5%AD%98%E6%80%A7"><span class="toc-text">可缓存性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%80%A7%EF%BC%8F%E8%87%AA%E6%96%87%E6%A1%A3%E5%8C%96%EF%BC%88Portable-Self-Documenting%EF%BC%89"><span class="toc-text">可移植性／自文档化（Portable &#x2F; Self-Documenting）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E7%90%86%E6%80%A7%E5%88%A9%E4%BA%8E%E9%87%8D%E6%9E%84"><span class="toc-text">合理性利于重构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96-Curry-%E9%87%8D%E7%82%B9"><span class="toc-text">柯里化 Curry (重点)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%90%88-Compose-%E9%87%8D%E7%82%B9"><span class="toc-text">组合 Compose (重点)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pointFree-%E6%A8%A1%E5%BC%8F"><span class="toc-text">pointFree 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debug-compose-%E5%87%BD%E6%95%B0%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">debug compose 函数的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E7%95%B4%E5%AD%A6-category-theory"><span class="toc-text">范畴学 (category theory)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#type-signature-%E7%B1%BB%E5%9E%8B%E7%AD%BE%E5%90%8D"><span class="toc-text">type signature 类型签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Functor-%E5%87%BD%E5%AD%90-%E9%87%8D%E7%82%B9"><span class="toc-text">Functor 函子 (重点)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Functor-%E7%9A%84%E7%89%B9%E6%80%A7%E8%A7%A3%E6%9E%90"><span class="toc-text">Functor 的特性解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pointed-Functor"><span class="toc-text">Pointed Functor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extract-%E5%87%BD%E6%95%B0%E8%8E%B7%E5%8F%96%E5%80%BC"><span class="toc-text">extract 函数获取值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Maybe-Functor"><span class="toc-text">Maybe Functor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Either-Functor"><span class="toc-text">Either Functor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO-Functor"><span class="toc-text">IO Functor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Monad-%E5%8D%95%E5%AD%90-%E9%87%8D%E7%82%B9"><span class="toc-text">Monad 单子 (重点)</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+  function loadUtterances() {
+    const els = document.querySelectorAll("#comments #utterances");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.error(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://utteranc.es/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadUtterances();
+  });
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
+    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
